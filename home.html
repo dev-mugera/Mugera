@@ -147,16 +147,92 @@
             color: var(--dark-gray);
         }
 
-        .post-image {
+        .post-media {
             width: 100%;
             overflow: hidden;
+            position: relative;
         }
 
-        .post-image img {
+        .post-image {
             width: 100%;
             height: auto;
             display: block;
             cursor: pointer;
+        }
+
+        .post-video {
+            width: 100%;
+            height: 400px;
+            background: var(--black);
+            position: relative;
+        }
+
+        .video-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .google-vid-embed {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.2rem;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .post-video:hover .video-controls {
+            opacity: 1;
+        }
+
+        .play-pause-btn {
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.1s;
         }
 
         .post-actions {
@@ -450,6 +526,16 @@
             .container {
                 max-width: 600px;
             }
+            
+            .post-video {
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .post-video {
+                height: 300px;
+            }
         }
     </style>
 </head>
@@ -469,26 +555,45 @@
         <div class="category-filter">
             <button class="category-btn active" data-category="all">All Content</button>
             <button class="category-btn" data-category="shop">Shop</button>
+            <button class="category-btn" data-category="video">Videos</button>
             <button class="category-btn" data-category="podcast">Podcasts</button>
             <button class="category-btn" data-category="inspiration">Inspiration</button>
             <button class="category-btn" data-category="event">Events</button>
         </div>
 
-        <!-- Post 1 - Clothing -->
-        <div class="post" data-category="shop" id="post-1">
+        <!-- Post 1 - Video -->
+        <div class="post" data-category="video" id="post-1">
             <div class="post-header">
                 <div class="post-user-info">
                     <div class="post-avatar">
-                        <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="Profile Picture">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Profile Picture">
                     </div>
                     <div>
                         <div class="post-user">iam_mugera</div>
-                        <div class="post-category">Fashion & Style</div>
+                        <div class="post-category">Video Content</div>
                     </div>
                 </div>
             </div>
-            <div class="post-image">
-                <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=699&q=80" alt="Limited Edition T-Shirt">
+            <div class="post-media">
+                <div class="post-video">
+                    <div class="video-container">
+                        <iframe 
+                            src="https://docs.google.com/videos/d/1Ozl8WCVOSopprrwoDiU9I8tr0ap8dP4m8XoaNpEgTbw/edit?usp=sharing" 
+                            class="google-vid-embed"
+                            allow="autoplay"
+                            frameborder="0"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="video-controls">
+                        <button class="play-pause-btn">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="post-actions">
                 <div class="action-left">
@@ -499,32 +604,32 @@
                         <i class="far fa-share-square"></i>
                     </button>
                 </div>
-                <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I'm%20interested%20in%20the%20Limited%20Edition%20T-Shirt" class="whatsapp-action" title="Contact via WhatsApp">
+                <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I%20enjoyed%20your%20video%20content" class="whatsapp-action" title="Contact via WhatsApp">
                     <i class="fab fa-whatsapp"></i>
                 </a>
             </div>
             <div class="post-content">
-                <div class="post-caption"><strong>Limited Edition T-Shirt</strong> - Premium quality cotton with exclusive "I AM MUGERA" design. Available in all sizes. Click the WhatsApp button to order.</div>
+                <div class="post-caption"><strong>Behind the Scenes</strong> - A look at my creative process and what goes into making content. Watch till the end for some exclusive insights!</div>
                 <div class="post-time">2 HOURS AGO</div>
-                <span class="post-type">SHOP</span>
+                <span class="post-type">VIDEO</span>
             </div>
         </div>
 
-        <!-- Post 2 - Podcast -->
-        <div class="post" data-category="podcast" id="post-2">
+        <!-- Post 2 - Clothing -->
+        <div class="post" data-category="shop" id="post-2">
             <div class="post-header">
                 <div class="post-user-info">
                     <div class="post-avatar">
-                        <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="Profile Picture">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Profile Picture">
                     </div>
                     <div>
                         <div class="post-user">iam_mugera</div>
-                        <div class="post-category">Podcast</div>
+                        <div class="post-category">Fashion & Style</div>
                     </div>
                 </div>
             </div>
-            <div class="post-image">
-                <img src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Podcast Episode">
+            <div class="post-media">
+                <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=699&q=80" alt="Limited Edition T-Shirt" class="post-image">
             </div>
             <div class="post-actions">
                 <div class="action-left">
@@ -535,32 +640,50 @@
                         <i class="far fa-share-square"></i>
                     </button>
                 </div>
-                <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I'm%20interested%20in%20your%20podcast%20content" class="whatsapp-action" title="Contact via WhatsApp">
+                <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I'm%20interested%20in%20the%20Limited%20Edition%20T-Shirt" class="whatsapp-action" title="Contact via WhatsApp">
                     <i class="fab fa-whatsapp"></i>
                 </a>
             </div>
             <div class="post-content">
-                <div class="post-caption"><strong>New Podcast Episode</strong> - Listen to my conversation about building authentic personal brands in the digital age. Available on all major platforms.</div>
+                <div class="post-caption"><strong>Limited Edition T-Shirt</strong> - Premium quality cotton with exclusive "I AM MUGERA" design. Available in all sizes. Click the WhatsApp button to order.</div>
                 <div class="post-time">1 DAY AGO</div>
-                <span class="post-type">PODCAST</span>
+                <span class="post-type">SHOP</span>
             </div>
         </div>
 
-        <!-- Post 3 - Daily Inspiration -->
-        <div class="post" data-category="inspiration" id="post-3">
+        <!-- Post 3 - Video -->
+        <div class="post" data-category="video" id="post-3">
             <div class="post-header">
                 <div class="post-user-info">
                     <div class="post-avatar">
-                        <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="Profile Picture">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Profile Picture">
                     </div>
                     <div>
                         <div class="post-user">iam_mugera</div>
-                        <div class="post-category">Daily Inspiration</div>
+                        <div class="post-category">Video Content</div>
                     </div>
                 </div>
             </div>
-            <div class="post-image">
-                <img src="https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=680&q=80" alt="Inspiration Quote">
+            <div class="post-media">
+                <div class="post-video">
+                    <div class="video-container">
+                        <div class="video-placeholder">
+                            <div>
+                                <i class="fas fa-play-circle" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                                <p>Sample Video Content</p>
+                                <p style="font-size: 0.9rem; opacity: 0.7;">(Google Vids integration)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="video-controls">
+                        <button class="play-pause-btn">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                        <div class="progress-bar">
+                            <div class="progress"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="post-actions">
                 <div class="action-left">
@@ -571,50 +694,14 @@
                         <i class="far fa-share-square"></i>
                     </button>
                 </div>
-                <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I%20enjoyed%20your%20inspirational%20post" class="whatsapp-action" title="Contact via WhatsApp">
+                <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I%20enjoyed%20your%20video%20content" class="whatsapp-action" title="Contact via WhatsApp">
                     <i class="fab fa-whatsapp"></i>
                 </a>
             </div>
             <div class="post-content">
-                <div class="post-caption"><strong>Daily Inspiration</strong> - Your journey is unique. Don't compare it to anyone else's. Stay focused on your path and trust the process.</div>
+                <div class="post-caption"><strong>Daily Vlog</strong> - A day in my life creating content and building the brand. See how I balance creativity with business.</div>
                 <div class="post-time">3 DAYS AGO</div>
-                <span class="post-type">INSPIRATION</span>
-            </div>
-        </div>
-
-        <!-- Post 4 - Recent Event -->
-        <div class="post" data-category="event" id="post-4">
-            <div class="post-header">
-                <div class="post-user-info">
-                    <div class="post-avatar">
-                        <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="Profile Picture">
-                    </div>
-                    <div>
-                        <div class="post-user">iam_mugera</div>
-                        <div class="post-category">Event Recap</div>
-                    </div>
-                </div>
-            </div>
-            <div class="post-image">
-                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Event Photo">
-            </div>
-            <div class="post-actions">
-                <div class="action-left">
-                    <button class="post-action save-btn" title="Save post">
-                        <i class="far fa-bookmark"></i>
-                    </button>
-                    <button class="post-action share-btn" title="Share post" data-post-id="post-4">
-                        <i class="far fa-share-square"></i>
-                    </button>
-                </div>
-                <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I%20want%20to%20know%20more%20about%20your%20events" class="whatsapp-action" title="Contact via WhatsApp">
-                    <i class="fab fa-whatsapp"></i>
-                </a>
-            </div>
-            <div class="post-content">
-                <div class="post-caption"><strong>Networking Event Recap</strong> - Amazing energy at yesterday's networking event! Thanks to everyone who came out. Stay tuned for the next one.</div>
-                <div class="post-time">1 WEEK AGO</div>
-                <span class="post-type">EVENT</span>
+                <span class="post-type">VIDEO</span>
             </div>
         </div>
 
@@ -684,8 +771,8 @@
             <span>Feed</span>
         </a>
         <a href="#" class="nav-item">
-            <i class="fas fa-calendar-alt nav-icon"></i>
-            <span>Events</span>
+            <i class="fas fa-video nav-icon"></i>
+            <span>Videos</span>
         </a>
         <a href="#" class="nav-item">
             <i class="fas fa-podcast nav-icon"></i>
@@ -724,7 +811,7 @@
         const modalImg = document.getElementById('modalImage');
         const closeModal = document.querySelector('.close-modal');
 
-        document.querySelectorAll('.post-image img').forEach(img => {
+        document.querySelectorAll('.post-image').forEach(img => {
             img.addEventListener('click', function() {
                 modal.style.display = 'flex';
                 modalImg.src = this.src;
@@ -749,6 +836,32 @@
                     nav.classList.remove('active');
                 });
                 this.classList.add('active');
+                
+                // Filter by category when nav items are clicked
+                const category = this.querySelector('span').textContent.toLowerCase();
+                const categoryMap = {
+                    'feed': 'all',
+                    'videos': 'video',
+                    'podcasts': 'podcast',
+                    'shop': 'shop'
+                };
+                
+                if (categoryMap[category]) {
+                    document.querySelectorAll('.category-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.getAttribute('data-category') === categoryMap[category]) {
+                            btn.classList.add('active');
+                        }
+                    });
+                    
+                    document.querySelectorAll('.post').forEach(post => {
+                        if (categoryMap[category] === 'all' || post.getAttribute('data-category') === categoryMap[category]) {
+                            post.style.display = 'block';
+                        } else {
+                            post.style.display = 'none';
+                        }
+                    });
+                }
             });
         });
 
@@ -861,6 +974,57 @@
                 }
             }
         });
+
+        // Video autoplay and pause on scroll
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const videoContainer = entry.target;
+                const iframe = videoContainer.querySelector('.google-vid-embed');
+                
+                if (entry.isIntersecting) {
+                    // Video is in view - attempt to play
+                    console.log('Video in view - would autoplay here');
+                } else {
+                    // Video is out of view - pause
+                    console.log('Video out of view - would pause here');
+                }
+            });
+        }, {
+            threshold: 0.7 // When 70% of video is visible
+        });
+
+        // Observe all video containers
+        document.querySelectorAll('.video-container').forEach(container => {
+            videoObserver.observe(container);
+        });
+
+        // Video controls simulation
+        document.querySelectorAll('.play-pause-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-pause')) {
+                    icon.classList.remove('fa-pause');
+                    icon.classList.add('fa-play');
+                    console.log('Video paused');
+                } else {
+                    icon.classList.remove('fa-play');
+                    icon.classList.add('fa-pause');
+                    console.log('Video playing');
+                }
+            });
+        });
+
+        // Simulate video progress (for demo purposes)
+        setInterval(() => {
+            document.querySelectorAll('.progress').forEach(progress => {
+                const currentWidth = parseInt(progress.style.width) || 0;
+                if (currentWidth < 100) {
+                    progress.style.width = (currentWidth + 1) + '%';
+                } else {
+                    progress.style.width = '0%';
+                }
+            });
+        }, 1000);
     </script>
 </body>
 </html>
