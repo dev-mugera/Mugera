@@ -703,15 +703,15 @@
             });
         });
 
-        // Bottom nav active state
+        // Bottom nav active state - FIXED NAVIGATION
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function(e) {
-                if (!this.classList.contains('active')) {
-                    document.querySelectorAll('.nav-item').forEach(nav => {
-                        nav.classList.remove('active');
-                    });
-                    this.classList.add('active');
+                // Only prevent default for current page navigation
+                if (this.href === window.location.href || this.classList.contains('active')) {
+                    e.preventDefault();
                 }
+                // Allow navigation to other pages
+                // The browser will handle the navigation naturally
             });
         });
 
