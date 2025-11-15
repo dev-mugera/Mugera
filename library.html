@@ -45,14 +45,28 @@
             z-index: 100;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border-bottom: 1px solid var(--light-gray);
-            height: 60px;
+            height: auto;
+            min-height: 60px;
         }
 
         .header-container {
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
             height: 100%;
+            flex-wrap: wrap;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .logo {
@@ -65,6 +79,47 @@
             width: auto;
         }
 
+        .brand-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-top: 2px;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            background-color: var(--gray);
+            transition: all 0.3s;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            cursor: pointer;
+        }
+
         /* Main Content */
         .container {
             max-width: 1200px;
@@ -72,23 +127,29 @@
             padding: 1rem;
         }
 
-        /* Page Header */
-        .page-header {
+        /* Brand Header */
+        .brand-header {
             text-align: center;
-            margin-bottom: 2rem;
-            padding: 1rem 0;
+            margin: 2rem 0 3rem;
+            padding: 0;
         }
 
-        .page-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+        .brand-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
         }
 
-        .page-header p {
-            color: var(--dark-gray);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
+        .brand-logo img {
+            height: 120px;
+            width: auto;
+        }
+
+        .brand-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--black);
+            letter-spacing: 1px;
         }
 
         /* Subscription Plans */
@@ -482,6 +543,45 @@
             background-color: var(--dark-gray);
         }
 
+        /* Coffee Support Section */
+        .coffee-support {
+            background-color: var(--gray);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .coffee-support h2 {
+            margin-bottom: 1rem;
+        }
+
+        .coffee-support p {
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .coffee-btn {
+            background-color: #6F4E37;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+
+        .coffee-btn:hover {
+            background-color: #5a3e2b;
+        }
+
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
@@ -537,6 +637,26 @@
             .library-categories {
                 justify-content: flex-start;
             }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+                padding: 10px 0;
+            }
+            
+            .search-container {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+            }
+            
+            .brand-title {
+                font-size: 2.2rem;
+            }
+            
+            .brand-logo img {
+                height: 90px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -556,6 +676,19 @@
             .steps-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .contact-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .brand-title {
+                font-size: 1.8rem;
+            }
+            
+            .brand-logo img {
+                height: 70px;
+            }
         }
     </style>
 </head>
@@ -563,18 +696,31 @@
     <!-- Header -->
     <header>
         <div class="header-container">
-            <div class="logo">
-                <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="I AM MUGERA Logo">
+            <div class="brand-section">
+                <div class="logo-container">
+                    <div class="logo">
+                        <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="I AM MUGERA Logo">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" class="search-bar" id="searchInput" placeholder="Search for books, authors, or categories...">
+                <button class="search-btn" id="searchButton">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="container">
-        <!-- Page Header -->
-        <div class="page-header">
-            <h1>I AM MUGERA E-Library</h1>
-            <p>Access thousands of transformative books with flexible subscription plans. Expand your mind, one book at a time.</p>
+        <!-- Brand Header -->
+        <div class="brand-header">
+            <div class="brand-logo">
+                <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="I AM MUGERA Logo">
+            </div>
+            <h1 class="brand-title">E-LIBRARY</h1>
         </div>
 
         <!-- Subscription Plans -->
@@ -669,6 +815,16 @@
                     <p class="step-description">Return books and borrow new ones as often as you like</p>
                 </div>
             </div>
+        </div>
+
+        <!-- Coffee Support Section -->
+        <div class="coffee-support">
+            <h2>Support Our Digital Content</h2>
+            <p>Enjoy our soft-copy materials? Help us continue creating valuable content by buying us a coffee. Your support allows us to maintain and expand our digital library offerings.</p>
+            <button class="coffee-btn" id="coffeeBtn">
+                <i class="fas fa-coffee"></i>
+                Buy Me a Coffee
+            </button>
         </div>
 
         <!-- Library Categories -->
@@ -838,6 +994,41 @@
     </nav>
 
     <script>
+        // Search functionality
+        document.getElementById('searchButton').addEventListener('click', performSearch);
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                // If search is empty, show all books
+                document.querySelectorAll('.book-card').forEach(card => {
+                    card.style.display = 'block';
+                });
+                return;
+            }
+            
+            // Filter books based on search term
+            document.querySelectorAll('.book-card').forEach(card => {
+                const title = card.querySelector('.book-title').textContent.toLowerCase();
+                const author = card.querySelector('.book-author').textContent.toLowerCase();
+                const category = card.querySelector('.book-category').textContent.toLowerCase();
+                const description = card.querySelector('.book-description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || author.includes(searchTerm) || 
+                    category.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
         // Subscription plan selection
         document.querySelectorAll('.subscribe-btn').forEach(button => {
             button.addEventListener('click', function() {
@@ -888,6 +1079,12 @@
                 const message = `Hi Mugera, I want to borrow "${bookTitle}" by ${bookAuthor} from your e-library`;
                 window.open(`https://wa.me/254727211191?text=${encodeURIComponent(message)}`, '_blank');
             });
+        });
+
+        // Coffee support button
+        document.getElementById('coffeeBtn').addEventListener('click', function() {
+            const message = "Hi Mugera, I'd like to support your digital library by buying you a coffee!";
+            window.open(`https://wa.me/254727211191?text=${encodeURIComponent(message)}`, '_blank');
         });
 
         // Bottom nav active state
