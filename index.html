@@ -266,109 +266,6 @@
             display: inline-block;
         }
 
-        /* Share Modal */
-        .share-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1001;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .share-content {
-            background-color: var(--white);
-            border-radius: 10px;
-            padding: 1.5rem;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-
-        .share-content h3 {
-            margin-bottom: 1rem;
-        }
-
-        .share-options {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 1.5rem 0;
-        }
-
-        .share-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
-        .share-option:hover {
-            transform: scale(1.1);
-        }
-
-        .share-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 5px;
-        }
-
-        .whatsapp-share {
-            background-color: var(--accent);
-            color: white;
-        }
-
-        .facebook-share {
-            background-color: #3b5998;
-            color: white;
-        }
-
-        .twitter-share {
-            background-color: #1da1f2;
-            color: white;
-        }
-
-        .link-share {
-            background-color: var(--dark-gray);
-            color: white;
-        }
-
-        .share-label {
-            font-size: 0.8rem;
-        }
-
-        .copy-link {
-            background-color: var(--black);
-            color: var(--white);
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.3s;
-        }
-
-        .copy-link:hover {
-            background-color: var(--dark-gray);
-        }
-
-        .copy-message {
-            color: var(--accent);
-            margin-top: 10px;
-            font-size: 0.9rem;
-            display: none;
-        }
-
         /* Bottom Navigation */
         .bottom-nav {
             position: fixed;
@@ -495,9 +392,6 @@
                     <button class="post-action save-btn" title="Save post">
                         <i class="far fa-bookmark"></i>
                     </button>
-                    <button class="post-action share-btn" title="Share post" data-post-id="post-1">
-                        <i class="far fa-share-square"></i>
-                    </button>
                 </div>
                 <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I%20want%20to%20learn%20more%20about%20your%20brand" class="whatsapp-action" title="Contact via WhatsApp">
                     <i class="fab fa-whatsapp"></i>
@@ -510,7 +404,7 @@
                     Through content, conversations, and community, we explore what it means to live with purpose, authenticity, and impact. Whether you're here for inspiration, education, or connection, you're in the right place.<br><br>
                     This is where we challenge norms, break barriers, and build together. Welcome to the journey.
                 </div>
-                <div class="post-time">JUST NOW</div>
+                <div class="post-time" id="post-1-time"></div>
                 <span class="post-type">INTRODUCTION</span>
             </div>
         </div>
@@ -551,9 +445,6 @@
                     <button class="post-action save-btn" title="Save post">
                         <i class="far fa-bookmark"></i>
                     </button>
-                    <button class="post-action share-btn" title="Share post" data-post-id="post-2">
-                        <i class="far fa-share-square"></i>
-                    </button>
                 </div>
                 <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I%20just%20watched%20your%20commercial%20about%20awakening%20men" class="whatsapp-action" title="Contact via WhatsApp">
                     <i class="fab fa-whatsapp"></i>
@@ -566,8 +457,52 @@
                     The awakening begins within - recognizing our power, embracing vulnerability, and stepping into our roles as builders, protectors, and healers of our communities.<br><br>
                     Join the conversation. Share your thoughts. Let's build better men for a better world.
                 </div>
-                <div class="post-time">1 DAY AGO</div>
+                <div class="post-time" id="post-2-time"></div>
                 <span class="post-type">COMMERCIAL</span>
+            </div>
+        </div>
+
+        <!-- Post 3 - Mugs and Dines -->
+        <div class="post" id="post-3">
+            <div class="post-header">
+                <div class="post-user-info">
+                    <div class="post-avatar">
+                        <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="I AM MUGERA Logo">
+                    </div>
+                    <div>
+                        <div class="post-user">iam_mugera</div>
+                        <div class="post-category">Dining Program</div>
+                    </div>
+                </div>
+            </div>
+            <div class="post-media">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Mugs and Dines Dining Experience" class="post-image">
+            </div>
+            <div class="post-actions">
+                <div class="action-left">
+                    <button class="post-action save-btn" title="Save post">
+                        <i class="far fa-bookmark"></i>
+                    </button>
+                </div>
+                <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I'm%20interested%20in%20the%20Mugs%20and%20Dines%20program" class="whatsapp-action" title="Contact via WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+            <div class="post-content">
+                <div class="post-caption">
+                    <strong>Mugs and Dines: Conversations Over Cuisine</strong><br><br>
+                    Welcome to Mugs and Dines, our exclusive dining program that brings people together for meaningful conversations about relationships, marriage, family dynamics, and personal growth.<br><br>
+                    In an intimate setting with carefully curated meals, we create space for authentic dialogue, shared experiences, and collective wisdom. Each event focuses on specific themes that matter most in our lives and relationships.<br><br>
+                    <strong>What to Expect:</strong><br>
+                    • Intimate dining experiences with limited seating<br>
+                    • Guided conversations on relevant relationship topics<br>
+                    • Shared stories and collective wisdom<br>
+                    • Practical tools for strengthening connections<br>
+                    • Networking with like-minded individuals<br><br>
+                    Whether you're navigating the complexities of modern relationships, seeking to strengthen your marriage, or looking to build healthier family dynamics, Mugs and Dines provides the space, community, and insights to support your journey.
+                </div>
+                <div class="post-time" id="post-3-time"></div>
+                <span class="post-type">DINING PROGRAM</span>
             </div>
         </div>
 
@@ -586,42 +521,6 @@
         </div>
     </main>
 
-    <!-- Share Modal -->
-    <div class="share-modal" id="shareModal">
-        <div class="share-content">
-            <h3>Share This Post</h3>
-            <div class="share-options">
-                <div class="share-option" data-platform="whatsapp">
-                    <div class="share-icon whatsapp-share">
-                        <i class="fab fa-whatsapp"></i>
-                    </div>
-                    <span class="share-label">WhatsApp</span>
-                </div>
-                <div class="share-option" data-platform="facebook">
-                    <div class="share-icon facebook-share">
-                        <i class="fab fa-facebook-f"></i>
-                    </div>
-                    <span class="share-label">Facebook</span>
-                </div>
-                <div class="share-option" data-platform="twitter">
-                    <div class="share-icon twitter-share">
-                        <i class="fab fa-twitter"></i>
-                    </div>
-                    <span class="share-label">Twitter</span>
-                </div>
-                <div class="share-option" data-platform="link">
-                    <div class="share-icon link-share">
-                        <i class="fas fa-link"></i>
-                    </div>
-                    <span class="share-label">Copy Link</span>
-                </div>
-            </div>
-            <button class="copy-link" id="copyLinkBtn">Copy Post Link</button>
-            <div class="copy-message" id="copyMessage">Link copied to clipboard!</div>
-            <button class="copy-link" id="closeShareModal" style="background-color: var(--light-gray); color: var(--dark-gray); margin-top: 10px;">Close</button>
-        </div>
-    </div>
-
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active">
@@ -632,7 +531,7 @@
             <i class="fas fa-calendar-alt nav-icon"></i>
             <span>Events</span>
         </a>
-        <a href="library.html" class="nav-item active">
+        <a href="library.html" class="nav-item">
             <i class="fas fa-book nav-icon"></i>
             <span>Library</span>
         </a>
@@ -661,87 +560,39 @@
             });
         });
 
-        // Share functionality
-        const shareModal = document.getElementById('shareModal');
-        const closeShareModal = document.getElementById('closeShareModal');
-        const copyLinkBtn = document.getElementById('copyLinkBtn');
-        const copyMessage = document.getElementById('copyMessage');
-        let currentPostId = '';
+        // Real publication dates for each post
+        const postDates = {
+            'post-1': new Date('2025-11-15'), // Brand Introduction
+            'post-2': new Date('2025-11-15'), // Commercial Video  
+            'post-3': new Date('2025-11-15')  // Mugs and Dines
+        };
 
-        // Open share modal
-        document.querySelectorAll('.share-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                // Get the post ID
-                currentPostId = this.getAttribute('data-post-id');
+        function updatePostTimes() {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            Object.keys(postDates).forEach(postId => {
+                const postDate = new Date(postDates[postId]);
+                const postDay = new Date(postDate.getFullYear(), postDate.getMonth(), postDate.getDate());
+                const timeElement = document.getElementById(`${postId}-time`);
                 
-                shareModal.style.display = 'flex';
-            });
-        });
-
-        // Close share modal
-        closeShareModal.addEventListener('click', function() {
-            shareModal.style.display = 'none';
-            copyMessage.style.display = 'none';
-        });
-
-        shareModal.addEventListener('click', function(e) {
-            if (e.target === shareModal) {
-                shareModal.style.display = 'none';
-                copyMessage.style.display = 'none';
-            }
-        });
-
-        // Share options
-        document.querySelectorAll('.share-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const platform = this.getAttribute('data-platform');
-                const postTitle = "Check out this post from I AM MUGERA";
-                const currentUrl = window.location.href.split('#')[0];
-                const postUrl = `${currentUrl}#${currentPostId}`;
-                
-                let shareUrl = '';
-                
-                switch(platform) {
-                    case 'whatsapp':
-                        shareUrl = `https://wa.me/?text=${encodeURIComponent(postTitle + ' ' + postUrl)}`;
-                        break;
-                    case 'facebook':
-                        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`;
-                        break;
-                    case 'twitter':
-                        shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(postTitle)}&url=${encodeURIComponent(postUrl)}`;
-                        break;
-                    case 'link':
-                        // Copy link functionality is handled separately
-                        return;
+                if (timeElement) {
+                    const diffTime = today - postDay;
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 0) {
+                        timeElement.textContent = 'TODAY';
+                    } else if (diffDays === 1) {
+                        timeElement.textContent = '1 DAY AGO';
+                    } else {
+                        timeElement.textContent = `${diffDays} DAYS AGO`;
+                    }
                 }
-                
-                // Open share URL in a new window
-                window.open(shareUrl, '_blank', 'width=600,height=400');
             });
-        });
+        }
 
-        // Copy link functionality
-        copyLinkBtn.addEventListener('click', function() {
-            const currentUrl = window.location.href.split('#')[0];
-            const postUrl = `${currentUrl}#${currentPostId}`;
-            
-            // Create a temporary input element to copy the URL
-            const tempInput = document.createElement('input');
-            tempInput.value = postUrl;
-            document.body.appendChild(tempInput);
-            tempInput.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempInput);
-            
-            // Show confirmation message
-            copyMessage.style.display = 'block';
-            
-            // Hide message after 2 seconds
-            setTimeout(() => {
-                copyMessage.style.display = 'none';
-            }, 2000);
-        });
+        // Update times when page loads
+        document.addEventListener('DOMContentLoaded', updatePostTimes);
 
         // Scroll to post if URL has hash
         window.addEventListener('DOMContentLoaded', () => {
@@ -792,7 +643,7 @@
             });
         });
 
-        // Bottom nav active state - REMOVED THE PREVENT DEFAULT FOR NAVIGATION
+        // Bottom nav active state
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 // Only prevent default for current page navigation
