@@ -163,6 +163,36 @@
             color: var(--dark-gray);
         }
 
+        /* Custom Google Button */
+        .custom-google-btn {
+            background: white;
+            color: #757575;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .custom-google-btn:hover {
+            background: #f8f9fa;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .custom-google-btn img {
+            width: 18px;
+            height: 18px;
+        }
+
         /* Profile Section */
         .profile-section {
             background-color: var(--white);
@@ -228,6 +258,7 @@
             display: flex;
             gap: 10px;
             margin-top: 1rem;
+            flex-wrap: wrap;
         }
 
         .profile-btn {
@@ -237,6 +268,7 @@
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s;
+            font-size: 0.9rem;
         }
 
         .profile-btn.primary {
@@ -251,6 +283,78 @@
 
         .profile-btn.primary:hover {
             background: var(--dark-gray);
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--google-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: var(--black);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s;
+            max-width: 300px;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .notification.error {
+            background: #e74c3c;
+        }
+
+        .notification.success {
+            background: var(--accent);
+        }
+
+        /* Manual Auth Form */
+        .manual-auth {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .manual-auth input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid var(--light-gray);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .manual-auth button {
+            width: 100%;
+            padding: 10px;
+            background: var(--black);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
         }
 
         /* Main Content */
@@ -554,10 +658,23 @@
                 flex-direction: column;
                 text-align: center;
             }
+            
+            .profile-actions {
+                justify-content: center;
+            }
+            
+            .notification {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
     <!-- Header -->
     <header>
         <div class="header-container">
@@ -583,7 +700,32 @@
             <button class="close-modal" id="closeModal">&times;</button>
             <h2>Join I AM MUGERA</h2>
             <p>Sign in to create your profile, save posts, and join the community</p>
+            
+            <!-- Google Sign In Button Container -->
             <div id="googleSignInButton"></div>
+            
+            <!-- Custom Google Button as Fallback -->
+            <button class="custom-google-btn" id="customGoogleBtn" style="display: none;">
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
+                Sign in with Google
+            </button>
+            
+            <!-- Manual Auth Fallback -->
+            <div class="manual-auth" id="manualAuth" style="display: none;">
+                <p style="font-size: 0.9rem; color: var(--dark-gray); margin-bottom: 1rem;">
+                    Having trouble with Google Sign-In? Enter your details:
+                </p>
+                <input type="text" id="manualName" placeholder="Your Name" required>
+                <input type="email" id="manualEmail" placeholder="Your Email" required>
+                <button id="manualSignIn">Create Profile</button>
+            </div>
+            
+            <!-- Fallback Toggle -->
+            <p style="margin-top: 1rem;">
+                <a href="#" id="toggleFallback" style="color: var(--google-blue); text-decoration: none; font-size: 0.9rem;">
+                    Having trouble? Try alternative sign-in
+                </a>
+            </p>
         </div>
     </div>
 
@@ -616,6 +758,7 @@
             <div class="profile-actions">
                 <button class="profile-btn" id="editProfileBtn">Edit Profile</button>
                 <button class="profile-btn primary" id="viewSavedBtn">View Saved Posts</button>
+                <button class="profile-btn" id="logoutBtn">Logout</button>
             </div>
         </div>
 
@@ -787,15 +930,16 @@
         </a>
     </nav>
 
-    <!-- Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Google Identity Services with Fallback -->
+    <script src="https://accounts.google.com/gsi/client" async defer onerror="handleGoogleScriptError()"></script>
     <script>
         // Configuration
+        const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbwCo8RkC1zka9RxW1YiDxuPzzCPWqtl2_ZqE_TlBDxLYFFMxHCLoTVZz6nBUR_SaAVC7w/exec';
         const GOOGLE_CLIENT_ID = '230366555128-bkm4jhc3c14scafm8808uk8u456u6cfk.apps.googleusercontent.com';
         
         // User state
         let currentUser = null;
-        let userProfile = null;
+        let googleAuthLoaded = false;
 
         // DOM Elements
         const loginBtn = document.getElementById('loginBtn');
@@ -812,62 +956,218 @@
         const savedPostsCountElement = document.getElementById('savedPostsCount');
         const daysActiveElement = document.getElementById('daysActive');
         const communityRankElement = document.getElementById('communityRank');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const notification = document.getElementById('notification');
+        const customGoogleBtn = document.getElementById('customGoogleBtn');
+        const manualAuth = document.getElementById('manualAuth');
+        const toggleFallback = document.getElementById('toggleFallback');
+        const manualSignIn = document.getElementById('manualSignIn');
 
-        // Initialize Google Sign In
+        // Handle Google Script Loading Error
+        function handleGoogleScriptError() {
+            console.warn('Google Identity Services failed to load, using fallback authentication');
+            googleAuthLoaded = false;
+            showFallbackAuth();
+        }
+
+        // Show fallback authentication options
+        function showFallbackAuth() {
+            document.getElementById('googleSignInButton').style.display = 'none';
+            customGoogleBtn.style.display = 'block';
+            showNotification('Using alternative sign-in method', 'success');
+        }
+
+        // Backend API Functions
+        async function backendRequest(action, data = null, method = 'POST') {
+            const url = `${BACKEND_URL}?action=${action}`;
+            
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    redirect: 'follow'
+                };
+                
+                if (data && method === 'POST') {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(url, options);
+                const result = await response.json();
+                
+                if (result.error) {
+                    throw new Error(result.error);
+                }
+                
+                return result;
+            } catch (error) {
+                console.error('Backend request failed:', error);
+                showNotification('Network error. Please try again.', 'error');
+                throw error;
+            }
+        }
+
+        // User management functions
+        async function createUser(userData) {
+            return await backendRequest('createUser', userData);
+        }
+
+        async function getUserProfile(userId) {
+            const url = `${BACKEND_URL}?action=getUserProfile&userId=${encodeURIComponent(userId)}`;
+            const response = await fetch(url);
+            return await response.json();
+        }
+
+        async function savePost(userId, postId) {
+            return await backendRequest('savePost', { userId, postId });
+        }
+
+        async function unsavePost(userId, postId) {
+            return await backendRequest('unsavePost', { userId, postId });
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = `notification show ${type}`;
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize Google Sign In with retry logic
         function initializeGoogleSignIn() {
             if (typeof google === 'undefined') {
-                console.error('Google Identity Services library not loaded');
+                console.warn('Google object not available, retrying in 1 second...');
+                setTimeout(initializeGoogleSignIn, 1000);
                 return;
             }
 
-            google.accounts.id.initialize({
-                client_id: GOOGLE_CLIENT_ID,
-                callback: handleCredentialResponse,
-                auto_select: false,
-                cancel_on_tap_outside: true
-            });
+            try {
+                google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: handleCredentialResponse,
+                    auto_select: false,
+                    cancel_on_tap_outside: true
+                });
 
-            // Render Google Sign In Button
-            google.accounts.id.renderButton(
-                document.getElementById('googleSignInButton'),
-                { 
-                    theme: 'outline', 
-                    size: 'large',
-                    width: 300,
-                    text: 'signin_with',
-                    shape: 'rectangular'
-                }
-            );
+                google.accounts.id.renderButton(
+                    document.getElementById('googleSignInButton'),
+                    { 
+                        theme: 'outline', 
+                        size: 'large',
+                        width: 300,
+                        text: 'signin_with',
+                        shape: 'rectangular'
+                    }
+                );
+                
+                googleAuthLoaded = true;
+                console.log('Google Sign-In initialized successfully');
+            } catch (error) {
+                console.error('Google Sign-In initialization failed:', error);
+                showFallbackAuth();
+            }
         }
 
         // Handle Google Sign In Response
-        function handleCredentialResponse(response) {
+        async function handleCredentialResponse(response) {
             console.log('Google Sign-In response received');
             
-            // Decode the JWT token to get user info
-            const responsePayload = decodeJWTResponse(response.credential);
-            
-            if (responsePayload) {
+            try {
+                showLoading(loginBtn);
+                
+                // Decode the JWT token to get user info
+                const responsePayload = decodeJWTResponse(response.credential);
+                
+                if (responsePayload) {
+                    await processUserSignIn({
+                        userId: responsePayload.sub,
+                        name: responsePayload.name,
+                        email: responsePayload.email,
+                        picture: responsePayload.picture
+                    });
+                }
+            } catch (error) {
+                console.error('Sign in failed:', error);
+                showNotification('Sign in failed. Please try again.', 'error');
+            } finally {
+                hideLoading(loginBtn);
+            }
+        }
+
+        // Process user sign in (common for both Google and manual auth)
+        async function processUserSignIn(userData) {
+            try {
+                // Create user in backend
+                const result = await createUser(userData);
+                
                 currentUser = {
-                    id: responsePayload.sub,
-                    name: responsePayload.name,
-                    email: responsePayload.email,
-                    picture: responsePayload.picture,
-                    given_name: responsePayload.given_name,
-                    family_name: responsePayload.family_name
+                    ...userData,
+                    ...result.user
                 };
 
-                // Save user to localStorage
-                saveUserToStorage(currentUser);
-                
+                // Load complete user data
+                const userProfile = await getUserProfile(currentUser.userId);
+                if (userProfile && userProfile.user) {
+                    currentUser = { ...currentUser, ...userProfile.user };
+                }
+
                 // Update UI
                 updateUserInterface();
                 
                 // Close modal
                 authModal.classList.remove('active');
                 
+                showNotification(`Welcome to I AM MUGERA, ${currentUser.name}!`);
                 console.log('User signed in:', currentUser.name);
+                
+                // Save to localStorage for session persistence
+                localStorage.setItem('iam_mugera_user', JSON.stringify(currentUser));
+            } catch (error) {
+                console.error('User processing failed:', error);
+                throw error;
             }
+        }
+
+        // Manual authentication handler
+        async function handleManualAuth() {
+            const name = document.getElementById('manualName').value.trim();
+            const email = document.getElementById('manualEmail').value.trim();
+            
+            if (!name || !email) {
+                showNotification('Please enter both name and email', 'error');
+                return;
+            }
+            
+            if (!validateEmail(email)) {
+                showNotification('Please enter a valid email address', 'error');
+                return;
+            }
+            
+            try {
+                showLoading(manualSignIn);
+                
+                await processUserSignIn({
+                    userId: 'manual_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                    name: name,
+                    email: email,
+                    picture: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=random'
+                });
+            } catch (error) {
+                console.error('Manual auth failed:', error);
+                showNotification('Failed to create profile. Please try again.', 'error');
+            } finally {
+                hideLoading(manualSignIn);
+            }
+        }
+
+        // Email validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
         }
 
         // Decode JWT token
@@ -886,112 +1186,47 @@
             }
         }
 
-        // Save user to localStorage
-        function saveUserToStorage(user) {
-            const userData = {
-                ...user,
-                joinedDate: new Date().toISOString(),
-                savedPosts: getUserSavedPosts() || []
-            };
-            localStorage.setItem('iam_mugera_user', JSON.stringify(userData));
+        // Show loading state
+        function showLoading(button) {
+            const originalText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<div class="loading"></div>';
+            button.setAttribute('data-original-text', originalText);
         }
 
-        // Get user from localStorage
-        function getUserFromStorage() {
-            const userData = localStorage.getItem('iam_mugera_user');
-            return userData ? JSON.parse(userData) : null;
-        }
-
-        // Get user's saved posts
-        function getUserSavedPosts() {
-            const user = getUserFromStorage();
-            return user ? user.savedPosts : [];
-        }
-
-        // Save a post for user
-        function savePostForUser(postId) {
-            const user = getUserFromStorage();
-            if (user) {
-                if (!user.savedPosts) {
-                    user.savedPosts = [];
-                }
-                
-                if (!user.savedPosts.includes(postId)) {
-                    user.savedPosts.push(postId);
-                    localStorage.setItem('iam_mugera_user', JSON.stringify(user));
-                    updateSavedPostsCount();
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        // Remove a saved post for user
-        function removeSavedPostForUser(postId) {
-            const user = getUserFromStorage();
-            if (user && user.savedPosts) {
-                user.savedPosts = user.savedPosts.filter(id => id !== postId);
-                localStorage.setItem('iam_mugera_user', JSON.stringify(user));
-                updateSavedPostsCount();
-                return true;
-            }
-            return false;
-        }
-
-        // Update saved posts count in profile
-        function updateSavedPostsCount() {
-            const savedPosts = getUserSavedPosts();
-            if (savedPostsCountElement) {
-                savedPostsCountElement.textContent = savedPosts ? savedPosts.length : 0;
-            }
-        }
-
-        // Calculate days active
-        function calculateDaysActive(joinDate) {
-            const join = new Date(joinDate);
-            const now = new Date();
-            const diffTime = Math.abs(now - join);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            return diffDays;
-        }
-
-        // Determine community rank
-        function getCommunityRank(daysActive, savedPostsCount) {
-            if (daysActive >= 30 && savedPostsCount >= 10) return 'Leader';
-            if (daysActive >= 7 && savedPostsCount >= 5) return 'Active';
-            if (daysActive >= 3) return 'Member';
-            return 'New';
+        // Hide loading state
+        function hideLoading(button) {
+            button.disabled = false;
+            const originalText = button.getAttribute('data-original-text');
+            button.innerHTML = originalText || '<i class="fab fa-google"></i><span>Sign In</span>';
         }
 
         // Update user interface based on auth state
-        function updateUserInterface() {
-            const user = getUserFromStorage();
-            
-            if (user) {
+        async function updateUserInterface() {
+            if (currentUser) {
                 // User is signed in
                 loginBtn.style.display = 'none';
                 userProfileElement.style.display = 'flex';
                 
                 // Update header user info
-                userNameElement.textContent = user.name;
-                userAvatarElement.src = user.picture;
+                userNameElement.textContent = currentUser.name;
+                userAvatarElement.src = currentUser.picture;
                 
                 // Update profile section
                 profileSection.classList.add('active');
-                profileNameElement.textContent = user.name;
-                profileEmailElement.textContent = user.email;
-                profileAvatarElement.src = user.picture;
+                profileNameElement.textContent = currentUser.name;
+                profileEmailElement.textContent = currentUser.email;
+                profileAvatarElement.src = currentUser.picture;
                 
                 // Calculate and display profile stats
-                const joinDate = user.joinedDate || new Date().toISOString();
+                const joinDate = new Date(currentUser.createdAt || new Date());
                 const daysActive = calculateDaysActive(joinDate);
-                const savedPosts = getUserSavedPosts();
-                const savedPostsCount = savedPosts ? savedPosts.length : 0;
-                const communityRank = getCommunityRank(daysActive, savedPostsCount);
+                const savedPosts = currentUser.savedPosts || [];
+                const communityRank = getCommunityRank(daysActive, savedPosts.length);
                 
-                memberSinceElement.textContent = new Date(joinDate).getFullYear();
+                memberSinceElement.textContent = joinDate.getFullYear();
                 daysActiveElement.textContent = daysActive;
-                savedPostsCountElement.textContent = savedPostsCount;
+                savedPostsCountElement.textContent = savedPosts.length;
                 communityRankElement.textContent = communityRank;
                 
                 // Update save buttons state
@@ -1028,27 +1263,37 @@
             });
         }
 
+        // Calculate days active
+        function calculateDaysActive(joinDate) {
+            const now = new Date();
+            const diffTime = Math.abs(now - joinDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        // Determine community rank
+        function getCommunityRank(daysActive, savedPostsCount) {
+            if (daysActive >= 30 && savedPostsCount >= 10) return 'Leader';
+            if (daysActive >= 7 && savedPostsCount >= 5) return 'Active';
+            if (daysActive >= 3) return 'Member';
+            return 'New';
+        }
+
         // Sign out user
         function signOut() {
             // Clear Google session
-            if (typeof google !== 'undefined') {
+            if (googleAuthLoaded && typeof google !== 'undefined') {
                 google.accounts.id.disableAutoSelect();
-                google.accounts.id.revoke(localStorage.getItem('google_token'), done => {
-                    console.log('Google session revoked');
-                });
             }
             
-            // Clear local storage
-            localStorage.removeItem('iam_mugera_user');
-            localStorage.removeItem('google_token');
-            
-            // Reset state
+            // Clear state
             currentUser = null;
-            userProfile = null;
+            localStorage.removeItem('iam_mugera_user');
             
             // Update UI
             updateUserInterface();
             
+            showNotification('You have been signed out');
             console.log('User signed out');
         }
 
@@ -1059,38 +1304,62 @@
 
         closeModal.addEventListener('click', () => {
             authModal.classList.remove('active');
+            // Reset fallback UI
+            manualAuth.style.display = 'none';
+            document.getElementById('googleSignInButton').style.display = 'block';
+            customGoogleBtn.style.display = 'none';
         });
 
         authModal.addEventListener('click', (e) => {
             if (e.target === authModal) {
                 authModal.classList.remove('active');
+                // Reset fallback UI
+                manualAuth.style.display = 'none';
+                document.getElementById('googleSignInButton').style.display = 'block';
+                customGoogleBtn.style.display = 'none';
             }
         });
 
+        // Toggle fallback authentication
+        toggleFallback.addEventListener('click', (e) => {
+            e.preventDefault();
+            manualAuth.style.display = manualAuth.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Custom Google button click (opens Google OAuth in new window)
+        customGoogleBtn.addEventListener('click', () => {
+            const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=token&scope=email profile&state=google_auth`;
+            window.open(googleAuthUrl, 'google_auth', 'width=500,height=600');
+        });
+
+        // Manual sign in
+        manualSignIn.addEventListener('click', handleManualAuth);
+
         userProfileElement.addEventListener('click', () => {
-            // Scroll to profile section
             profileSection.scrollIntoView({ behavior: 'smooth' });
         });
 
         document.getElementById('editProfileBtn').addEventListener('click', () => {
-            alert('Profile editing feature coming soon!');
+            showNotification('Profile editing feature coming soon!');
         });
 
         document.getElementById('viewSavedBtn').addEventListener('click', () => {
-            const savedPosts = getUserSavedPosts();
-            if (savedPosts && savedPosts.length > 0) {
-                alert(`You have ${savedPosts.length} saved posts:\n${savedPosts.map(id => `Post ${id}`).join(', ')}`);
-            } else {
-                alert('You haven\'t saved any posts yet.');
+            if (currentUser && currentUser.savedPosts) {
+                const savedPosts = currentUser.savedPosts;
+                if (savedPosts.length > 0) {
+                    showNotification(`You have ${savedPosts.length} saved posts`);
+                } else {
+                    showNotification('You haven\'t saved any posts yet.');
+                }
             }
         });
 
+        logoutBtn.addEventListener('click', signOut);
+
         // Save button functionality
         document.querySelectorAll('.save-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const user = getUserFromStorage();
-                
-                if (!user) {
+            button.addEventListener('click', async function() {
+                if (!currentUser) {
                     authModal.classList.add('active');
                     return;
                 }
@@ -1098,112 +1367,91 @@
                 const postId = this.getAttribute('data-post-id');
                 const icon = this.querySelector('i');
                 
-                if (icon.classList.contains('far')) {
-                    // Save post
-                    if (savePostForUser(postId)) {
+                try {
+                    if (icon.classList.contains('far')) {
+                        // Save post
+                        showLoading(this);
+                        const result = await savePost(currentUser.userId, postId);
                         icon.classList.remove('far');
                         icon.classList.add('fas');
                         this.classList.add('active');
                         this.title = 'Remove from saved';
+                        
+                        // Update local state
+                        if (!currentUser.savedPosts) currentUser.savedPosts = [];
+                        currentUser.savedPosts.push(postId);
+                        updateSavedPostsCount();
+                        
+                        showNotification('Post saved successfully!');
                         console.log(`Post ${postId} saved`);
-                    }
-                } else {
-                    // Remove saved post
-                    if (removeSavedPostForUser(postId)) {
+                    } else {
+                        // Remove saved post
+                        showLoading(this);
+                        const result = await unsavePost(currentUser.userId, postId);
                         icon.classList.remove('fas');
                         icon.classList.add('far');
                         this.classList.remove('active');
                         this.title = 'Save post';
+                        
+                        // Update local state
+                        currentUser.savedPosts = currentUser.savedPosts.filter(id => id !== postId);
+                        updateSavedPostsCount();
+                        
+                        showNotification('Post removed from saved');
                         console.log(`Post ${postId} removed from saved`);
                     }
+                    
+                    // Update localStorage
+                    localStorage.setItem('iam_mugera_user', JSON.stringify(currentUser));
+                } catch (error) {
+                    console.error('Failed to update saved post:', error);
+                    showNotification('Failed to update saved post. Please try again.', 'error');
+                } finally {
+                    hideLoading(this);
                 }
             });
         });
 
+        // Update saved posts count in profile
+        function updateSavedPostsCount() {
+            if (savedPostsCountElement && currentUser) {
+                savedPostsCountElement.textContent = currentUser.savedPosts ? currentUser.savedPosts.length : 0;
+                // Update community rank
+                const joinDate = new Date(currentUser.createdAt || new Date());
+                const daysActive = calculateDaysActive(joinDate);
+                communityRankElement.textContent = getCommunityRank(daysActive, currentUser.savedPosts.length);
+            }
+        }
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Google Sign In
-            initializeGoogleSignIn();
+            // Try to initialize Google Sign-In
+            setTimeout(initializeGoogleSignIn, 1000);
             
-            // Check if user is already signed in
-            const savedUser = getUserFromStorage();
+            // Check for existing user session
+            const savedUser = localStorage.getItem('iam_mugera_user');
             if (savedUser) {
-                currentUser = savedUser;
-                updateUserInterface();
-            }
-            
-            // Rest of your existing initialization code...
-            updatePostTimes();
-            
-            // Scroll to post if URL has hash
-            if (window.location.hash) {
-                const postElement = document.querySelector(window.location.hash);
-                if (postElement) {
-                    postElement.scrollIntoView({ behavior: 'smooth' });
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    updateUserInterface();
+                    showNotification(`Welcome back, ${currentUser.name}!`);
+                } catch (error) {
+                    console.log('No valid session found');
+                    localStorage.removeItem('iam_mugera_user');
                 }
             }
-
-            // Video autoplay and pause on scroll
-            const videoObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const videoContainer = entry.target;
-                    const iframe = videoContainer.querySelector('.google-vid-embed');
-                    
-                    if (entry.isIntersecting) {
-                        // Video is in view - attempt to play
-                        console.log('Video in view - would autoplay here');
-                    } else {
-                        // Video is out of view - pause
-                        console.log('Video out of view - would pause here');
-                    }
-                });
-            }, {
-                threshold: 0.7 // When 70% of video is visible
-            });
-
-            // Observe video container
-            document.querySelectorAll('.video-container').forEach(container => {
-                videoObserver.observe(container);
-            });
-
-            // Video controls simulation
-            document.querySelectorAll('.play-pause-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const icon = this.querySelector('i');
-                    if (icon.classList.contains('fa-pause')) {
-                        icon.classList.remove('fa-pause');
-                        icon.classList.add('fa-play');
-                        console.log('Video paused');
-                    } else {
-                        icon.classList.remove('fa-play');
-                        icon.classList.add('fa-pause');
-                        console.log('Video playing');
-                    }
-                });
-            });
-
-            // Bottom nav active state
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    // Only prevent default for current page navigation
-                    if (this.href === window.location.href) {
-                        e.preventDefault();
-                    }
-                    
-                    // Update active state visually
-                    document.querySelectorAll('.nav-item').forEach(nav => {
-                        nav.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                });
-            });
+            
+            updateUserInterface();
+            updatePostTimes();
+            
+            // Your existing initialization code...
         });
 
         // Your existing post time functionality
         const postDates = {
-            'post-1': new Date('2025-11-15'), // Brand Introduction
-            'post-2': new Date('2025-11-15'), // Commercial Video  
-            'post-3': new Date('2025-11-15')  // Mugs and Dines
+            'post-1': new Date('2025-11-15'),
+            'post-2': new Date('2025-11-15'), 
+            'post-3': new Date('2025-11-15')
         };
 
         function updatePostTimes() {
