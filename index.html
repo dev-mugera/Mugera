@@ -163,34 +163,11 @@
             color: var(--dark-gray);
         }
 
-        /* Custom Google Button */
-        .custom-google-btn {
-            background: white;
-            color: #757575;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            padding: 12px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
+        /* Google Sign In Button Container */
+        #googleSignInButton {
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 12px;
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto;
-            transition: background-color 0.3s, box-shadow 0.3s;
-        }
-
-        .custom-google-btn:hover {
-            background: #f8f9fa;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .custom-google-btn img {
-            width: 18px;
-            height: 18px;
+            margin: 1rem 0;
         }
 
         /* Profile Section */
@@ -328,33 +305,6 @@
 
         .notification.success {
             background: var(--accent);
-        }
-
-        /* Manual Auth Form */
-        .manual-auth {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--light-gray);
-        }
-
-        .manual-auth input {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid var(--light-gray);
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .manual-auth button {
-            width: 100%;
-            padding: 10px;
-            background: var(--black);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
         }
 
         /* Main Content */
@@ -700,32 +650,7 @@
             <button class="close-modal" id="closeModal">&times;</button>
             <h2>Join I AM MUGERA</h2>
             <p>Sign in to create your profile, save posts, and join the community</p>
-            
-            <!-- Google Sign In Button Container -->
             <div id="googleSignInButton"></div>
-            
-            <!-- Custom Google Button as Fallback -->
-            <button class="custom-google-btn" id="customGoogleBtn" style="display: none;">
-                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
-                Sign in with Google
-            </button>
-            
-            <!-- Manual Auth Fallback -->
-            <div class="manual-auth" id="manualAuth" style="display: none;">
-                <p style="font-size: 0.9rem; color: var(--dark-gray); margin-bottom: 1rem;">
-                    Having trouble with Google Sign-In? Enter your details:
-                </p>
-                <input type="text" id="manualName" placeholder="Your Name" required>
-                <input type="email" id="manualEmail" placeholder="Your Email" required>
-                <button id="manualSignIn">Create Profile</button>
-            </div>
-            
-            <!-- Fallback Toggle -->
-            <p style="margin-top: 1rem;">
-                <a href="#" id="toggleFallback" style="color: var(--google-blue); text-decoration: none; font-size: 0.9rem;">
-                    Having trouble? Try alternative sign-in
-                </a>
-            </p>
         </div>
     </div>
 
@@ -930,8 +855,8 @@
         </a>
     </nav>
 
-    <!-- Google Identity Services with Fallback -->
-    <script src="https://accounts.google.com/gsi/client" async defer onerror="handleGoogleScriptError()"></script>
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
         // Configuration
         const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbwCo8RkC1zka9RxW1YiDxuPzzCPWqtl2_ZqE_TlBDxLYFFMxHCLoTVZz6nBUR_SaAVC7w/exec';
@@ -939,7 +864,7 @@
         
         // User state
         let currentUser = null;
-        let googleAuthLoaded = false;
+        let googleAuthInitialized = false;
 
         // DOM Elements
         const loginBtn = document.getElementById('loginBtn');
@@ -958,24 +883,6 @@
         const communityRankElement = document.getElementById('communityRank');
         const logoutBtn = document.getElementById('logoutBtn');
         const notification = document.getElementById('notification');
-        const customGoogleBtn = document.getElementById('customGoogleBtn');
-        const manualAuth = document.getElementById('manualAuth');
-        const toggleFallback = document.getElementById('toggleFallback');
-        const manualSignIn = document.getElementById('manualSignIn');
-
-        // Handle Google Script Loading Error
-        function handleGoogleScriptError() {
-            console.warn('Google Identity Services failed to load, using fallback authentication');
-            googleAuthLoaded = false;
-            showFallbackAuth();
-        }
-
-        // Show fallback authentication options
-        function showFallbackAuth() {
-            document.getElementById('googleSignInButton').style.display = 'none';
-            customGoogleBtn.style.display = 'block';
-            showNotification('Using alternative sign-in method', 'success');
-        }
 
         // Backend API Functions
         async function backendRequest(action, data = null, method = 'POST') {
@@ -1037,11 +944,11 @@
             }, 3000);
         }
 
-        // Initialize Google Sign In with retry logic
+        // Initialize Google Sign In
         function initializeGoogleSignIn() {
             if (typeof google === 'undefined') {
-                console.warn('Google object not available, retrying in 1 second...');
-                setTimeout(initializeGoogleSignIn, 1000);
+                console.error('Google Identity Services library not loaded');
+                setTimeout(initializeGoogleSignIn, 100);
                 return;
             }
 
@@ -1064,17 +971,17 @@
                     }
                 );
                 
-                googleAuthLoaded = true;
+                googleAuthInitialized = true;
                 console.log('Google Sign-In initialized successfully');
             } catch (error) {
                 console.error('Google Sign-In initialization failed:', error);
-                showFallbackAuth();
+                showNotification('Google Sign-In failed to initialize', 'error');
             }
         }
 
         // Handle Google Sign In Response
         async function handleCredentialResponse(response) {
-            console.log('Google Sign-In response received');
+            console.log('Google Sign-In response received:', response);
             
             try {
                 showLoading(loginBtn);
@@ -1083,12 +990,40 @@
                 const responsePayload = decodeJWTResponse(response.credential);
                 
                 if (responsePayload) {
-                    await processUserSignIn({
+                    const userData = {
                         userId: responsePayload.sub,
                         name: responsePayload.name,
                         email: responsePayload.email,
                         picture: responsePayload.picture
-                    });
+                    };
+
+                    console.log('Processing user data:', userData);
+
+                    // Create user in backend
+                    const result = await createUser(userData);
+                    
+                    currentUser = {
+                        ...userData,
+                        ...result.user
+                    };
+
+                    // Load complete user data
+                    const userProfile = await getUserProfile(currentUser.userId);
+                    if (userProfile && userProfile.user) {
+                        currentUser = { ...currentUser, ...userProfile.user };
+                    }
+
+                    // Update UI
+                    updateUserInterface();
+                    
+                    // Close modal
+                    authModal.classList.remove('active');
+                    
+                    showNotification(`Welcome to I AM MUGERA, ${currentUser.name}!`);
+                    console.log('User signed in successfully:', currentUser.name);
+                    
+                    // Save to localStorage for session persistence
+                    localStorage.setItem('iam_mugera_user', JSON.stringify(currentUser));
                 }
             } catch (error) {
                 console.error('Sign in failed:', error);
@@ -1096,78 +1031,6 @@
             } finally {
                 hideLoading(loginBtn);
             }
-        }
-
-        // Process user sign in (common for both Google and manual auth)
-        async function processUserSignIn(userData) {
-            try {
-                // Create user in backend
-                const result = await createUser(userData);
-                
-                currentUser = {
-                    ...userData,
-                    ...result.user
-                };
-
-                // Load complete user data
-                const userProfile = await getUserProfile(currentUser.userId);
-                if (userProfile && userProfile.user) {
-                    currentUser = { ...currentUser, ...userProfile.user };
-                }
-
-                // Update UI
-                updateUserInterface();
-                
-                // Close modal
-                authModal.classList.remove('active');
-                
-                showNotification(`Welcome to I AM MUGERA, ${currentUser.name}!`);
-                console.log('User signed in:', currentUser.name);
-                
-                // Save to localStorage for session persistence
-                localStorage.setItem('iam_mugera_user', JSON.stringify(currentUser));
-            } catch (error) {
-                console.error('User processing failed:', error);
-                throw error;
-            }
-        }
-
-        // Manual authentication handler
-        async function handleManualAuth() {
-            const name = document.getElementById('manualName').value.trim();
-            const email = document.getElementById('manualEmail').value.trim();
-            
-            if (!name || !email) {
-                showNotification('Please enter both name and email', 'error');
-                return;
-            }
-            
-            if (!validateEmail(email)) {
-                showNotification('Please enter a valid email address', 'error');
-                return;
-            }
-            
-            try {
-                showLoading(manualSignIn);
-                
-                await processUserSignIn({
-                    userId: 'manual_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                    name: name,
-                    email: email,
-                    picture: 'https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=random'
-                });
-            } catch (error) {
-                console.error('Manual auth failed:', error);
-                showNotification('Failed to create profile. Please try again.', 'error');
-            } finally {
-                hideLoading(manualSignIn);
-            }
-        }
-
-        // Email validation
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
         }
 
         // Decode JWT token
@@ -1282,8 +1145,11 @@
         // Sign out user
         function signOut() {
             // Clear Google session
-            if (googleAuthLoaded && typeof google !== 'undefined') {
+            if (googleAuthInitialized && typeof google !== 'undefined') {
                 google.accounts.id.disableAutoSelect();
+                google.accounts.id.revoke(currentUser?.email, done => {
+                    console.log('Google session revoked');
+                });
             }
             
             // Clear state
@@ -1304,36 +1170,13 @@
 
         closeModal.addEventListener('click', () => {
             authModal.classList.remove('active');
-            // Reset fallback UI
-            manualAuth.style.display = 'none';
-            document.getElementById('googleSignInButton').style.display = 'block';
-            customGoogleBtn.style.display = 'none';
         });
 
         authModal.addEventListener('click', (e) => {
             if (e.target === authModal) {
                 authModal.classList.remove('active');
-                // Reset fallback UI
-                manualAuth.style.display = 'none';
-                document.getElementById('googleSignInButton').style.display = 'block';
-                customGoogleBtn.style.display = 'none';
             }
         });
-
-        // Toggle fallback authentication
-        toggleFallback.addEventListener('click', (e) => {
-            e.preventDefault();
-            manualAuth.style.display = manualAuth.style.display === 'none' ? 'block' : 'none';
-        });
-
-        // Custom Google button click (opens Google OAuth in new window)
-        customGoogleBtn.addEventListener('click', () => {
-            const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(window.location.origin)}&response_type=token&scope=email profile&state=google_auth`;
-            window.open(googleAuthUrl, 'google_auth', 'width=500,height=600');
-        });
-
-        // Manual sign in
-        manualSignIn.addEventListener('click', handleManualAuth);
 
         userProfileElement.addEventListener('click', () => {
             profileSection.scrollIntoView({ behavior: 'smooth' });
@@ -1425,8 +1268,8 @@
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            // Try to initialize Google Sign-In
-            setTimeout(initializeGoogleSignIn, 1000);
+            // Initialize Google Sign In
+            initializeGoogleSignIn();
             
             // Check for existing user session
             const savedUser = localStorage.getItem('iam_mugera_user');
@@ -1444,7 +1287,64 @@
             updateUserInterface();
             updatePostTimes();
             
-            // Your existing initialization code...
+            // Scroll to post if URL has hash
+            if (window.location.hash) {
+                const postElement = document.querySelector(window.location.hash);
+                if (postElement) {
+                    postElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            // Video autoplay and pause on scroll
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const videoContainer = entry.target;
+                    const iframe = videoContainer.querySelector('.google-vid-embed');
+                    
+                    if (entry.isIntersecting) {
+                        console.log('Video in view');
+                    } else {
+                        console.log('Video out of view');
+                    }
+                });
+            }, {
+                threshold: 0.7
+            });
+
+            // Observe video container
+            document.querySelectorAll('.video-container').forEach(container => {
+                videoObserver.observe(container);
+            });
+
+            // Video controls simulation
+            document.querySelectorAll('.play-pause-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('fa-pause')) {
+                        icon.classList.remove('fa-pause');
+                        icon.classList.add('fa-play');
+                        console.log('Video paused');
+                    } else {
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-pause');
+                        console.log('Video playing');
+                    }
+                });
+            });
+
+            // Bottom nav active state
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (this.href === window.location.href) {
+                        e.preventDefault();
+                    }
+                    
+                    document.querySelectorAll('.nav-item').forEach(nav => {
+                        nav.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
         });
 
         // Your existing post time functionality
