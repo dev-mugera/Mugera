@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.8, maximum-scale=1.0, user-scalable=no">
-    <title>I AM MUGERA</title>
+    <title>I AM MUGERA - Join Our Community</title>
     <link rel="icon" type="image/x-icon" href="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -23,6 +23,8 @@
             --accent: #25D366;
             --whatsapp-green: #25D366;
             --whatsapp-dark: #128C7E;
+            --primary: #2c3e50;
+            --secondary: #3498db;
         }
 
         html {
@@ -72,39 +74,7 @@
             gap: 10px;
         }
 
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 20px;
-            transition: background-color 0.3s;
-        }
-
-        .user-profile:hover {
-            background-color: var(--light-gray);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-            background: var(--gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: var(--dark-gray);
-        }
-
-        .user-name {
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .login-btn {
+        .join-btn {
             background-color: var(--whatsapp-green);
             color: white;
             border: none;
@@ -116,317 +86,370 @@
             align-items: center;
             gap: 8px;
             transition: background-color 0.3s;
+            text-decoration: none;
         }
 
-        .login-btn:hover {
+        .join-btn:hover {
             background-color: var(--whatsapp-dark);
         }
 
-        /* Auth Modal - FIXED HEIGHT */
-        .auth-modal {
+        /* Welcome Modal */
+        .welcome-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
             justify-content: center;
             align-items: center;
-            padding: 1rem;
         }
 
-        .auth-modal.active {
+        .welcome-modal.active {
             display: flex;
         }
 
-        .auth-content {
+        .welcome-content {
             background-color: white;
-            padding: 1.5rem;
-            border-radius: 8px;
+            border-radius: 12px;
             width: 90%;
-            max-width: 400px;
-            max-height: 80vh; /* Limit height */
-            overflow-y: auto; /* Make scrollable if needed */
+            max-width: 500px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: modalAppear 0.5s ease-out;
+        }
+
+        @keyframes modalAppear {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .welcome-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem;
             text-align: center;
-            position: relative;
         }
 
-        .auth-content h2 {
-            margin-bottom: 1rem;
-            color: var(--black);
+        .welcome-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
         }
 
-        .auth-content p {
+        .welcome-header p {
+            opacity: 0.9;
+        }
+
+        .welcome-body {
+            padding: 2rem;
+        }
+
+        .benefits-list {
+            margin: 1.5rem 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
             margin-bottom: 1rem;
-            color: var(--dark-gray);
+        }
+
+        .benefit-icon {
+            background: var(--whatsapp-green);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.8rem;
+        }
+
+        .benefit-text h4 {
+            margin-bottom: 4px;
+            color: var(--primary);
+        }
+
+        .benefit-text p {
             font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+
+        .welcome-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--whatsapp-green);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--whatsapp-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--dark-gray);
+            color: white;
         }
 
         .close-modal {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
             border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark-gray);
-        }
-
-        /* WhatsApp Sign In Button */
-        .whatsapp-signin-btn {
-            background-color: var(--whatsapp-green);
             color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 12px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-            transition: background-color 0.3s;
-            margin-bottom: 1rem;
-        }
-
-        .whatsapp-signin-btn:hover {
-            background-color: var(--whatsapp-dark);
-        }
-
-        .whatsapp-signin-btn i {
-            font-size: 1.2rem;
-        }
-
-        /* Verification Steps - COMPACT VERSION */
-        .verification-steps {
-            background: var(--gray);
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-            text-align: left;
-            display: none;
-        }
-
-        .verification-step {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 0.8rem;
-        }
-
-        .verification-step:last-child {
-            margin-bottom: 0;
-        }
-
-        .step-number {
-            background: var(--whatsapp-green);
-            color: white;
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
-            font-weight: bold;
-            flex-shrink: 0;
+            cursor: pointer;
+            font-size: 1.2rem;
         }
 
-        .step-content {
-            flex: 1;
+        /* Registration Modal */
+        .registration-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
         }
 
-        .step-content h4 {
-            margin-bottom: 3px;
-            color: var(--black);
-            font-size: 0.9rem;
+        .registration-modal.active {
+            display: flex;
         }
 
-        .step-content p {
-            margin-bottom: 0;
-            font-size: 0.8rem;
-            color: var(--dark-gray);
+        .registration-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: modalAppear 0.5s ease-out;
         }
 
-        .verification-code {
-            background: var(--white);
-            border: 2px dashed var(--whatsapp-green);
-            border-radius: 6px;
-            padding: 0.8rem;
+        .registration-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
             text-align: center;
-            margin: 0.8rem 0;
-            font-family: monospace;
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: var(--black);
+            position: relative;
         }
 
-        .manual-verification {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--light-gray);
+        .registration-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .manual-verification h4 {
-            margin-bottom: 0.8rem;
-            color: var(--black);
-            font-size: 0.9rem;
+        .registration-body {
+            padding: 2rem;
         }
 
         .form-group {
-            margin-bottom: 0.8rem;
-            text-align: left;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.5rem;
             font-weight: 600;
             color: var(--dark-gray);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--whatsapp-green);
+            outline: none;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .membership-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 1.5rem 0;
+        }
+
+        .membership-option {
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .membership-option.selected {
+            border-color: var(--whatsapp-green);
+            background-color: rgba(37, 211, 102, 0.05);
+        }
+
+        .membership-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .membership-name {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .membership-price {
+            font-weight: bold;
+            color: var(--whatsapp-green);
+        }
+
+        .membership-features {
+            list-style: none;
+        }
+
+        .membership-features li {
+            padding: 5px 0;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .membership-features li i {
+            color: var(--whatsapp-green);
             font-size: 0.8rem;
         }
 
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid var(--light-gray);
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-
-        .verify-btn {
-            background-color: var(--black);
+        .submit-btn {
+            background-color: var(--whatsapp-green);
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 10px;
-            font-size: 0.9rem;
+            border-radius: 6px;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
             width: 100%;
             transition: background-color 0.3s;
-            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .verify-btn:hover {
-            background-color: var(--dark-gray);
+        .submit-btn:hover {
+            background-color: var(--whatsapp-dark);
         }
 
-        .verify-btn:disabled {
+        .submit-btn:disabled {
             background-color: var(--light-gray);
             cursor: not-allowed;
         }
 
-        /* Profile Section */
-        .profile-section {
-            background-color: var(--white);
-            border: 1px solid var(--light-gray);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+        /* Success Modal */
+        .success-modal {
             display: none;
-        }
-
-        .profile-section.active {
-            display: block;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 1rem;
-        }
-
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--light-gray);
-            background: var(--gray);
-            display: flex;
-            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: var(--dark-gray);
+            align-items: center;
         }
 
-        .profile-info h2 {
-            margin-bottom: 5px;
-        }
-
-        .profile-info p {
-            color: var(--dark-gray);
-            font-size: 0.9rem;
-        }
-
-        .profile-stats {
+        .success-modal.active {
             display: flex;
-            gap: 20px;
-            margin: 1rem 0;
-            padding: 1rem 0;
-            border-top: 1px solid var(--light-gray);
-            border-bottom: 1px solid var(--light-gray);
         }
 
-        .stat {
+        .success-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
             text-align: center;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: modalAppear 0.5s ease-out;
         }
 
-        .stat-value {
-            font-weight: bold;
-            font-size: 1.2rem;
+        .success-icon {
+            font-size: 3.5rem;
+            color: var(--whatsapp-green);
+            margin-bottom: 1.5rem;
         }
 
-        .stat-label {
-            font-size: 0.8rem;
+        .success-content h2 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .success-content p {
+            margin-bottom: 1.5rem;
             color: var(--dark-gray);
-        }
-
-        .profile-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .profile-btn {
-            padding: 8px 16px;
-            border: 1px solid var(--light-gray);
-            background: white;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .profile-btn.primary {
-            background: var(--black);
-            color: white;
-            border-color: var(--black);
-        }
-
-        .profile-btn:hover {
-            background: var(--light-gray);
-        }
-
-        .profile-btn.primary:hover {
-            background: var(--dark-gray);
         }
 
         /* Loading spinner */
         .loading {
             display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid var(--whatsapp-green);
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--whatsapp-green);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -751,6 +774,10 @@
             .post-video {
                 height: 500px;
             }
+            
+            .membership-options {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -758,27 +785,19 @@
                 height: 300px;
             }
             
-            .user-name {
-                display: none;
-            }
-            
-            .profile-header {
+            .welcome-actions {
                 flex-direction: column;
-                text-align: center;
             }
             
-            .profile-actions {
-                justify-content: center;
+            .form-row {
+                flex-direction: column;
+                gap: 0;
             }
             
             .notification {
                 right: 10px;
                 left: 10px;
                 max-width: none;
-            }
-            
-            .auth-content {
-                padding: 1rem;
             }
         }
     </style>
@@ -787,6 +806,172 @@
     <!-- Notification -->
     <div class="notification" id="notification"></div>
 
+    <!-- Welcome Modal -->
+    <div class="welcome-modal" id="welcomeModal">
+        <div class="welcome-content">
+            <div class="welcome-header">
+                <h2>Welcome to I AM MUGERA</h2>
+                <p>Join our community of conscious individuals</p>
+                <button class="close-modal" id="closeWelcomeModal">&times;</button>
+            </div>
+            <div class="welcome-body">
+                <p>We're excited to have you here! By joining our community, you'll get access to exclusive content, events, and a network of like-minded individuals.</p>
+                
+                <div class="benefits-list">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>E-Library Access</h4>
+                            <p>Curated resources for personal growth and development</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Life Coaching Events</h4>
+                            <p>Monthly sessions to help you achieve your personal goals</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="benefit-text">
+                            <h4>Team Building</h4>
+                            <p>Connect with others in our community through engaging activities</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="welcome-actions">
+                    <button class="btn btn-primary" id="registerNowBtn">
+                        <i class="fas fa-user-plus"></i> Register Now
+                    </button>
+                    <button class="btn btn-secondary" id="maybeLaterBtn">
+                        Maybe Later
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div class="registration-modal" id="registrationModal">
+        <div class="registration-content">
+            <div class="registration-header">
+                <h2>Join I AM MUGERA</h2>
+                <p>Complete your registration to access all benefits</p>
+                <button class="close-modal" id="closeRegistrationModal">&times;</button>
+            </div>
+            <div class="registration-body">
+                <form id="registrationForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="occupation">Occupation</label>
+                        <input type="text" id="occupation" name="occupation" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hearAbout">How did you hear about us?</label>
+                        <select id="hearAbout" name="hearAbout" required>
+                            <option value="">Select an option</option>
+                            <option value="social-media">Social Media</option>
+                            <option value="friend">Friend/Colleague</option>
+                            <option value="event">Event</option>
+                            <option value="search">Online Search</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Select Your Membership</label>
+                        <div class="membership-options">
+                            <div class="membership-option" data-value="basic">
+                                <div class="membership-header">
+                                    <span class="membership-name">Basic Membership</span>
+                                    <span class="membership-price">KSh 1,500/month</span>
+                                </div>
+                                <ul class="membership-features">
+                                    <li><i class="fas fa-check"></i> E-library Basic Access</li>
+                                    <li><i class="fas fa-check"></i> Monthly Life Coaching Events</li>
+                                    <li><i class="fas fa-check"></i> Team Building Events</li>
+                                    <li><i class="fas fa-check"></i> Community Access</li>
+                                </ul>
+                            </div>
+                            <div class="membership-option" data-value="premium">
+                                <div class="membership-header">
+                                    <span class="membership-name">Premium Membership</span>
+                                    <span class="membership-price">KSh 3,000/month</span>
+                                </div>
+                                <ul class="membership-features">
+                                    <li><i class="fas fa-check"></i> All Basic Benefits</li>
+                                    <li><i class="fas fa-check"></i> Advanced E-library Access</li>
+                                    <li><i class="fas fa-check"></i> One-on-One Coaching Sessions</li>
+                                    <li><i class="fas fa-check"></i> Priority Event Registration</li>
+                                    <li><i class="fas fa-check"></i> Exclusive Content</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <input type="hidden" id="membershipType" name="membershipType" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="goals">What are your personal development goals?</label>
+                        <textarea id="goals" name="goals" rows="3" placeholder="Tell us about what you hope to achieve by joining our community..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitRegistration">
+                        <i class="fas fa-paper-plane"></i> Complete Registration
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Registration Successful!</h2>
+            <p>Thank you for joining I AM MUGERA. We're excited to have you in our community.</p>
+            <p>We'll contact you shortly with more details about your membership.</p>
+            <button class="btn btn-primary" id="closeSuccessModal">
+                <i class="fas fa-thumbs-up"></i> Awesome!
+            </button>
+        </div>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="header-container">
@@ -794,100 +979,16 @@
                 <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="I AM MUGERA Logo">
             </div>
             <div class="auth-section">
-                <div class="user-profile" id="userProfile" style="display: none;">
-                    <div class="user-avatar" id="userAvatar"></div>
-                    <span class="user-name" id="userName"></span>
-                </div>
-                <button class="login-btn" id="loginBtn">
+                <a href="https://wa.me/254727211191?text=Hi%20Mugera,%20I%20want%20to%20join%20your%20community" class="join-btn" target="_blank">
                     <i class="fab fa-whatsapp"></i>
-                    <span>Sign In</span>
-                </button>
+                    <span>Join Us</span>
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- Auth Modal - COMPACT VERSION -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-content">
-            <button class="close-modal" id="closeModal">&times;</button>
-            <h2>Join I AM MUGERA</h2>
-            <p>Sign in with WhatsApp to create your profile</p>
-            
-            <button class="whatsapp-signin-btn" id="whatsappSignInBtn">
-                <i class="fab fa-whatsapp"></i>
-                Sign in with WhatsApp
-            </button>
-
-            <div class="verification-steps" id="verificationSteps">
-                <h3 style="margin-bottom: 0.8rem; text-align: center; font-size: 1rem;">Verification Steps</h3>
-                
-                <div class="verification-step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>Copy Verification Code</h4>
-                        <div class="verification-code" id="verificationCode">123456</div>
-                    </div>
-                </div>
-                
-                <div class="verification-step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>Send via WhatsApp</h4>
-                        <p>Send the code to: <strong>+254 727 211 191</strong></p>
-                    </div>
-                </div>
-
-                <div class="manual-verification">
-                    <h4>Enter Your Details</h4>
-                    <div class="form-group">
-                        <label for="userName">Your Name</label>
-                        <input type="text" id="userName" placeholder="Enter your full name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="userPhone">Phone Number</label>
-                        <input type="tel" id="userPhone" placeholder="+254 712 345 678">
-                    </div>
-                    
-                    <button class="verify-btn" id="manualVerifyBtn">Complete Verification</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Content -->
     <main class="container">
-        <!-- User Profile Section -->
-        <div class="profile-section" id="profileSection">
-            <div class="profile-header">
-                <div class="profile-avatar" id="profileAvatar"></div>
-                <div class="profile-info">
-                    <h2 id="profileName">User Name</h2>
-                    <p id="profilePhone">+254 712 345 678</p>
-                    <p>Member since <span id="memberSince">2024</span></p>
-                </div>
-            </div>
-            <div class="profile-stats">
-                <div class="stat">
-                    <div class="stat-value" id="savedPostsCount">0</div>
-                    <div class="stat-label">Saved Posts</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="daysActive">1</div>
-                    <div class="stat-label">Days Active</div>
-                </div>
-                <div class="stat">
-                    <div class="stat-value" id="communityRank">New</div>
-                    <div class="stat-label">Community Rank</div>
-                </div>
-            </div>
-            <div class="profile-actions">
-                <button class="profile-btn" id="editProfileBtn">Edit Profile</button>
-                <button class="profile-btn primary" id="viewSavedBtn">View Saved Posts</button>
-                <button class="profile-btn" id="logoutBtn">Logout</button>
-            </div>
-        </div>
-
         <!-- Post 1 - Brand Introduction -->
         <div class="post" id="post-1">
             <div class="post-header">
@@ -1059,85 +1160,21 @@
     <script>
         // Configuration
         const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbwCo8RkC1zka9RxW1YiDxuPzzCPWqtl2_ZqE_TlBDxLYFFMxHCLoTVZz6nBUR_SaAVC7w/exec';
-        const ADMIN_WHATSAPP = '254727211191'; // Your WhatsApp number
         
-        // User state
-        let currentUser = null;
-
         // DOM Elements
-        const loginBtn = document.getElementById('loginBtn');
-        const authModal = document.getElementById('authModal');
-        const closeModal = document.getElementById('closeModal');
-        const userProfileElement = document.getElementById('userProfile');
-        const userNameElement = document.getElementById('userName');
-        const userAvatarElement = document.getElementById('userAvatar');
-        const profileSection = document.getElementById('profileSection');
-        const profileNameElement = document.getElementById('profileName');
-        const profilePhoneElement = document.getElementById('profilePhone');
-        const profileAvatarElement = document.getElementById('profileAvatar');
-        const memberSinceElement = document.getElementById('memberSince');
-        const savedPostsCountElement = document.getElementById('savedPostsCount');
-        const daysActiveElement = document.getElementById('daysActive');
-        const communityRankElement = document.getElementById('communityRank');
-        const logoutBtn = document.getElementById('logoutBtn');
+        const welcomeModal = document.getElementById('welcomeModal');
+        const registrationModal = document.getElementById('registrationModal');
+        const successModal = document.getElementById('successModal');
+        const closeWelcomeModal = document.getElementById('closeWelcomeModal');
+        const closeRegistrationModal = document.getElementById('closeRegistrationModal');
+        const closeSuccessModal = document.getElementById('closeSuccessModal');
+        const registerNowBtn = document.getElementById('registerNowBtn');
+        const maybeLaterBtn = document.getElementById('maybeLaterBtn');
+        const registrationForm = document.getElementById('registrationForm');
+        const submitRegistration = document.getElementById('submitRegistration');
         const notification = document.getElementById('notification');
-        const whatsappSignInBtn = document.getElementById('whatsappSignInBtn');
-        const verificationSteps = document.getElementById('verificationSteps');
-        const verificationCode = document.getElementById('verificationCode');
-        const manualVerifyBtn = document.getElementById('manualVerifyBtn');
-        const userNameInput = document.getElementById('userName');
-        const userPhoneInput = document.getElementById('userPhone');
-
-        // Backend API Functions
-        async function backendRequest(action, data = null, method = 'POST') {
-            const url = `${BACKEND_URL}?action=${action}`;
-            
-            try {
-                const options = {
-                    method: method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    redirect: 'follow'
-                };
-                
-                if (data && method === 'POST') {
-                    options.body = JSON.stringify(data);
-                }
-                
-                const response = await fetch(url, options);
-                const result = await response.json();
-                
-                if (result.error) {
-                    throw new Error(result.error);
-                }
-                
-                return result;
-            } catch (error) {
-                console.error('Backend request failed:', error);
-                showNotification('Network error. Please try again.', 'error');
-                throw error;
-            }
-        }
-
-        // User management functions
-        async function createUser(userData) {
-            return await backendRequest('createUser', userData);
-        }
-
-        async function getUserProfile(userId) {
-            const url = `${BACKEND_URL}?action=getUserProfile&userId=${encodeURIComponent(userId)}`;
-            const response = await fetch(url);
-            return await response.json();
-        }
-
-        async function savePost(userId, postId) {
-            return await backendRequest('savePost', { userId, postId });
-        }
-
-        async function unsavePost(userId, postId) {
-            return await backendRequest('unsavePost', { userId, postId });
-        }
+        const membershipOptions = document.querySelectorAll('.membership-option');
+        const membershipTypeInput = document.getElementById('membershipType');
 
         // Show notification
         function showNotification(message, type = 'success') {
@@ -1148,119 +1185,11 @@
             }, 4000);
         }
 
-        // Generate verification code - FIXED: No MUGERA prefix
-        function generateVerificationCode() {
-            return Math.floor(100000 + Math.random() * 900000).toString();
-        }
-
-        // Generate user avatar with initials
-        function generateAvatar(name, element) {
-            const initials = name.split(' ').map(word => word[0]).join('').toUpperCase();
-            element.textContent = initials;
-        }
-
-        // Open WhatsApp with pre-filled message
-        function openWhatsAppWithCode(code) {
-            const message = `Verification Code: ${code}`;
-            const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
-
-        // Start WhatsApp verification process
-        function startWhatsAppVerification() {
-            const verificationCodeValue = generateVerificationCode();
-            verificationCode.textContent = verificationCodeValue;
-            
-            // Show verification steps
-            verificationSteps.style.display = 'block';
-            
-            // Open WhatsApp with the code
-            openWhatsAppWithCode(verificationCodeValue);
-            
-            showNotification('WhatsApp opened with verification code. Please send the message.');
-        }
-
-        // Complete manual verification - FIXED: Added proper error handling
-        async function completeManualVerification() {
-            const name = userNameInput.value.trim();
-            const phone = userPhoneInput.value.trim();
-            
-            console.log('Manual verification started:', { name, phone });
-            
-            if (!name) {
-                showNotification('Please enter your name', 'error');
-                userNameInput.focus();
-                return;
-            }
-            
-            if (!phone) {
-                showNotification('Please enter your phone number', 'error');
-                userPhoneInput.focus();
-                return;
-            }
-            
-            // Basic phone validation
-            const phoneRegex = /^\+?[\d\s-]{10,}$/;
-            if (!phoneRegex.test(phone)) {
-                showNotification('Please enter a valid phone number', 'error');
-                userPhoneInput.focus();
-                return;
-            }
-            
-            try {
-                showLoading(manualVerifyBtn);
-                
-                const userData = {
-                    userId: `whatsapp_${phone.replace(/\D/g, '')}`, // Remove non-digits
-                    name: name,
-                    phone: phone,
-                    provider: 'whatsapp',
-                    picture: '', // We'll generate avatar
-                    verified: true
-                };
-
-                console.log('Creating user with data:', userData);
-                
-                // Create user in backend
-                const result = await createUser(userData);
-                console.log('Backend response:', result);
-                
-                currentUser = {
-                    ...userData,
-                    ...result.user,
-                    createdAt: result.user?.createdAt || new Date().toISOString(),
-                    savedPosts: result.user?.savedPosts || []
-                };
-
-                console.log('User created successfully:', currentUser);
-
-                // Update UI
-                updateUserInterface();
-                
-                // Close modal and reset form
-                authModal.style.display = 'none';
-                verificationSteps.style.display = 'none';
-                userNameInput.value = '';
-                userPhoneInput.value = '';
-                
-                showNotification(`Welcome to I AM MUGERA, ${currentUser.name}!`);
-                
-                // Save to localStorage for session persistence
-                localStorage.setItem('iam_mugera_user', JSON.stringify(currentUser));
-                
-            } catch (error) {
-                console.error('Verification failed:', error);
-                showNotification('Failed to complete verification. Please try again.', 'error');
-            } finally {
-                hideLoading(manualVerifyBtn);
-            }
-        }
-
         // Show loading state
         function showLoading(button) {
             const originalText = button.innerHTML;
             button.disabled = true;
-            button.innerHTML = '<div class="loading"></div> Verifying...';
+            button.innerHTML = '<div class="loading"></div> Processing...';
             button.setAttribute('data-original-text', originalText);
         }
 
@@ -1268,244 +1197,149 @@
         function hideLoading(button) {
             button.disabled = false;
             const originalText = button.getAttribute('data-original-text');
-            button.innerHTML = originalText || 'Complete Verification';
+            button.innerHTML = originalText || 'Complete Registration';
         }
 
-        // Update user interface based on auth state
-        function updateUserInterface() {
-            if (currentUser) {
-                // User is signed in
-                loginBtn.style.display = 'none';
-                userProfileElement.style.display = 'flex';
-                
-                // Update header user info
-                userNameElement.textContent = currentUser.name;
-                generateAvatar(currentUser.name, userAvatarElement);
-                
-                // Update profile section
-                profileSection.classList.add('active');
-                profileNameElement.textContent = currentUser.name;
-                profilePhoneElement.textContent = currentUser.phone;
-                generateAvatar(currentUser.name, profileAvatarElement);
-                
-                // Calculate and display profile stats
-                const joinDate = new Date(currentUser.createdAt || new Date());
-                const daysActive = calculateDaysActive(joinDate);
-                const savedPosts = currentUser.savedPosts || [];
-                const communityRank = getCommunityRank(daysActive, savedPosts.length);
-                
-                memberSinceElement.textContent = joinDate.getFullYear();
-                daysActiveElement.textContent = daysActive;
-                savedPostsCountElement.textContent = savedPosts.length;
-                communityRankElement.textContent = communityRank;
-                
-                // Update save buttons state
-                updateSaveButtonsState(savedPosts);
-                
-            } else {
-                // User is signed out
-                loginBtn.style.display = 'flex';
-                userProfileElement.style.display = 'none';
-                profileSection.classList.remove('active');
-                
-                // Reset save buttons
-                document.querySelectorAll('.save-btn').forEach(btn => {
-                    const icon = btn.querySelector('i');
-                    icon.classList.remove('fas');
-                    icon.classList.add('far');
-                    btn.classList.remove('active');
-                    btn.title = 'Save post';
-                });
+        // Check if user has visited before
+        function hasVisitedBefore() {
+            return localStorage.getItem('iam_mugera_visited') === 'true';
+        }
+
+        // Mark user as visited
+        function markAsVisited() {
+            localStorage.setItem('iam_mugera_visited', 'true');
+        }
+
+        // Show welcome modal for first-time visitors
+        function showWelcomeModal() {
+            if (!hasVisitedBefore()) {
+                setTimeout(() => {
+                    welcomeModal.classList.add('active');
+                }, 1000);
             }
         }
 
-        // Update save buttons based on saved posts
-        function updateSaveButtonsState(savedPosts) {
-            document.querySelectorAll('.save-btn').forEach(btn => {
-                const postId = btn.getAttribute('data-post-id');
-                if (savedPosts && savedPosts.includes(postId)) {
-                    const icon = btn.querySelector('i');
-                    icon.classList.remove('far');
-                    icon.classList.add('fas');
-                    btn.classList.add('active');
-                    btn.title = 'Remove from saved';
-                }
+        // Membership selection
+        membershipOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                membershipOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                membershipTypeInput.value = this.getAttribute('data-value');
             });
-        }
+        });
 
-        // Calculate days active
-        function calculateDaysActive(joinDate) {
-            const now = new Date();
-            const diffTime = Math.abs(now - joinDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            return diffDays;
-        }
-
-        // Determine community rank
-        function getCommunityRank(daysActive, savedPostsCount) {
-            if (daysActive >= 30 && savedPostsCount >= 10) return 'Leader';
-            if (daysActive >= 7 && savedPostsCount >= 5) return 'Active';
-            if (daysActive >= 3) return 'Member';
-            return 'New';
-        }
-
-        // Sign out user
-        function signOut() {
-            // Clear state
-            currentUser = null;
-            localStorage.removeItem('iam_mugera_user');
+        // Form submission
+        registrationForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            // Update UI
-            updateUserInterface();
+            // Validate membership selection
+            if (!membershipTypeInput.value) {
+                showNotification('Please select a membership option', 'error');
+                return;
+            }
             
-            showNotification('You have been signed out');
-            console.log('User signed out');
-        }
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Add timestamp
+            data.timestamp = new Date().toISOString();
+            data.source = 'website_registration';
+            
+            try {
+                showLoading(submitRegistration);
+                
+                // Send to Google Apps Script
+                const response = await fetch(BACKEND_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Show success modal
+                    registrationModal.classList.remove('active');
+                    successModal.classList.add('active');
+                    
+                    // Mark as visited to prevent showing welcome modal again
+                    markAsVisited();
+                    
+                    // Reset form
+                    registrationForm.reset();
+                    membershipOptions.forEach(opt => opt.classList.remove('selected'));
+                    membershipTypeInput.value = '';
+                    
+                    showNotification('Registration successful! Welcome to the community.');
+                } else {
+                    throw new Error(result.error || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                showNotification('Registration failed. Please try again or contact us directly.', 'error');
+            } finally {
+                hideLoading(submitRegistration);
+            }
+        });
 
         // Event Listeners
-        loginBtn.addEventListener('click', () => {
-            authModal.style.display = 'flex';
-            verificationSteps.style.display = 'none';
-        });
-
-        closeModal.addEventListener('click', () => {
-            authModal.style.display = 'none';
-            verificationSteps.style.display = 'none';
-        });
-
-        authModal.addEventListener('click', (e) => {
-            if (e.target === authModal) {
-                authModal.style.display = 'none';
-                verificationSteps.style.display = 'none';
-            }
-        });
-
-        // WhatsApp sign in button
-        whatsappSignInBtn.addEventListener('click', startWhatsAppVerification);
-
-        // Manual verification - FIXED: Added proper event listener
-        manualVerifyBtn.addEventListener('click', completeManualVerification);
-
-        // Enter key in manual verification
-        userPhoneInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                completeManualVerification();
-            }
-        });
-
-        userProfileElement.addEventListener('click', () => {
-            profileSection.scrollIntoView({ behavior: 'smooth' });
-        });
-
-        document.getElementById('editProfileBtn').addEventListener('click', () => {
-            showNotification('Profile editing feature coming soon!');
-        });
-
-        document.getElementById('viewSavedBtn').addEventListener('click', () => {
-            if (currentUser && currentUser.savedPosts) {
-                const savedPosts = currentUser.savedPosts;
-                if (savedPosts.length > 0) {
-                    showNotification(`You have ${savedPosts.length} saved posts: ${savedPosts.map(id => `Post ${id}`).join(', ')}`);
-                } else {
-                    showNotification('You haven\'t saved any posts yet.');
-                }
-            }
-        });
-
-        logoutBtn.addEventListener('click', signOut);
-
-        // Save button functionality
-        document.querySelectorAll('.save-btn').forEach(button => {
-            button.addEventListener('click', async function() {
-                if (!currentUser) {
-                    authModal.style.display = 'flex';
-                    return;
-                }
-                
-                const postId = this.getAttribute('data-post-id');
-                const icon = this.querySelector('i');
-                
-                try {
-                    if (icon.classList.contains('far')) {
-                        // Save post
-                        showLoading(this);
-                        const result = await savePost(currentUser.userId, postId);
-                        icon.classList.remove('far');
-                        icon.classList.add('fas');
-                        this.classList.add('active');
-                        this.title = 'Remove from saved';
-                        
-                        // Update local state
-                        if (!currentUser.savedPosts) currentUser.savedPosts = [];
-                        if (!currentUser.savedPosts.includes(postId)) {
-                            currentUser.savedPosts.push(postId);
-                        }
-                        updateSavedPostsCount();
-                        
-                        showNotification('Post saved successfully!');
-                        console.log(`Post ${postId} saved`);
-                    } else {
-                        // Remove saved post
-                        showLoading(this);
-                        const result = await unsavePost(currentUser.userId, postId);
-                        icon.classList.remove('fas');
-                        icon.classList.add('far');
-                        this.classList.remove('active');
-                        this.title = 'Save post';
-                        
-                        // Update local state
-                        currentUser.savedPosts = currentUser.savedPosts.filter(id => id !== postId);
-                        updateSavedPostsCount();
-                        
-                        showNotification('Post removed from saved');
-                        console.log(`Post ${postId} removed from saved`);
-                    }
-                    
-                    // Update localStorage
-                    localStorage.setItem('iam_mugera_user', JSON.stringify(currentUser));
-                } catch (error) {
-                    console.error('Failed to update saved post:', error);
-                    showNotification('Failed to update saved post. Please try again.', 'error');
-                } finally {
-                    hideLoading(this);
-                }
-            });
-        });
-
-        // Update saved posts count in profile
-        function updateSavedPostsCount() {
-            if (savedPostsCountElement && currentUser) {
-                savedPostsCountElement.textContent = currentUser.savedPosts ? currentUser.savedPosts.length : 0;
-                // Update community rank
-                const joinDate = new Date(currentUser.createdAt || new Date());
-                const daysActive = calculateDaysActive(joinDate);
-                communityRankElement.textContent = getCommunityRank(daysActive, currentUser.savedPosts.length);
-            }
-        }
-
-        // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            // Check for existing user session
-            const savedUser = localStorage.getItem('iam_mugera_user');
-            if (savedUser) {
-                try {
-                    currentUser = JSON.parse(savedUser);
-                    updateUserInterface();
-                    showNotification(`Welcome back, ${currentUser.name}!`);
-                } catch (error) {
-                    console.log('No valid session found');
-                    localStorage.removeItem('iam_mugera_user');
-                }
-            }
+            // Show welcome modal for first-time visitors
+            showWelcomeModal();
             
-            updateUserInterface();
+            // Update post times
             updatePostTimes();
-            
-            // Debug: Check if event listeners are working
-            console.log('Event listeners initialized');
         });
 
-        // Your existing post time functionality
+        // Welcome modal actions
+        registerNowBtn.addEventListener('click', function() {
+            welcomeModal.classList.remove('active');
+            registrationModal.classList.add('active');
+        });
+
+        maybeLaterBtn.addEventListener('click', function() {
+            welcomeModal.classList.remove('active');
+            markAsVisited();
+        });
+
+        // Close modals
+        closeWelcomeModal.addEventListener('click', function() {
+            welcomeModal.classList.remove('active');
+            markAsVisited();
+        });
+
+        closeRegistrationModal.addEventListener('click', function() {
+            registrationModal.classList.remove('active');
+        });
+
+        closeSuccessModal.addEventListener('click', function() {
+            successModal.classList.remove('active');
+        });
+
+        // Close modals when clicking outside
+        welcomeModal.addEventListener('click', function(e) {
+            if (e.target === welcomeModal) {
+                welcomeModal.classList.remove('active');
+                markAsVisited();
+            }
+        });
+
+        registrationModal.addEventListener('click', function(e) {
+            if (e.target === registrationModal) {
+                registrationModal.classList.remove('active');
+            }
+        });
+
+        successModal.addEventListener('click', function(e) {
+            if (e.target === successModal) {
+                successModal.classList.remove('active');
+            }
+        });
+
+        // Post time functionality
         const postDates = {
             'post-1': new Date('2025-11-15'),
             'post-2': new Date('2025-11-15'), 
