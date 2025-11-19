@@ -21,6 +21,7 @@
             --dark-gray: #333333;
             --light-gray: #e0e0e0;
             --accent: #25D366;
+            --google-blue: #4285F4;
         }
 
         html {
@@ -49,7 +50,7 @@
 
         .header-container {
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
             height: 100%;
         }
@@ -62,6 +63,194 @@
         .logo img {
             height: 40px;
             width: auto;
+        }
+
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .user-profile:hover {
+            background-color: var(--light-gray);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .login-btn {
+            background-color: var(--google-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .login-btn:hover {
+            background-color: #3367D6;
+        }
+
+        /* Auth Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .auth-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .auth-content h2 {
+            margin-bottom: 1rem;
+            color: var(--black);
+        }
+
+        .auth-content p {
+            margin-bottom: 1.5rem;
+            color: var(--dark-gray);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background-color: var(--white);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .profile-section.active {
+            display: block;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--light-gray);
+        }
+
+        .profile-info h2 {
+            margin-bottom: 5px;
+        }
+
+        .profile-info p {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+            margin: 1rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid var(--light-gray);
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .profile-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--light-gray);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .profile-btn.primary {
+            background: var(--black);
+            color: white;
+            border-color: var(--black);
+        }
+
+        .profile-btn:hover {
+            background: var(--light-gray);
+        }
+
+        .profile-btn.primary:hover {
+            background: var(--dark-gray);
         }
 
         /* Main Content */
@@ -356,6 +545,15 @@
             .post-video {
                 height: 300px;
             }
+            
+            .user-name {
+                display: none;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -366,11 +564,61 @@
             <div class="logo">
                 <img src="https://i.postimg.cc/c4CzSQzq/Whats-App-Image-2025-11-13-at-14-53-50-1-removebg-preview.png" alt="I AM MUGERA Logo">
             </div>
+            <div class="auth-section">
+                <div class="user-profile" id="userProfile" style="display: none;">
+                    <img src="" alt="User Avatar" class="user-avatar" id="userAvatar">
+                    <span class="user-name" id="userName"></span>
+                </div>
+                <button class="login-btn" id="loginBtn">
+                    <i class="fab fa-google"></i>
+                    <span>Sign In</span>
+                </button>
+            </div>
         </div>
     </header>
 
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <h2>Join I AM MUGERA</h2>
+            <p>Sign in to create your profile, save posts, and join the community</p>
+            <div id="googleSignInButton"></div>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <main class="container">
+        <!-- User Profile Section -->
+        <div class="profile-section" id="profileSection">
+            <div class="profile-header">
+                <img src="" alt="Profile Picture" class="profile-avatar" id="profileAvatar">
+                <div class="profile-info">
+                    <h2 id="profileName">User Name</h2>
+                    <p id="profileEmail">user@example.com</p>
+                    <p>Member since <span id="memberSince">2025</span></p>
+                </div>
+            </div>
+            <div class="profile-stats">
+                <div class="stat">
+                    <div class="stat-value" id="savedPostsCount">0</div>
+                    <div class="stat-label">Saved Posts</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="daysActive">1</div>
+                    <div class="stat-label">Days Active</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="communityRank">New</div>
+                    <div class="stat-label">Community Rank</div>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <button class="profile-btn" id="editProfileBtn">Edit Profile</button>
+                <button class="profile-btn primary" id="viewSavedBtn">View Saved Posts</button>
+            </div>
+        </div>
+
         <!-- Post 1 - Brand Introduction -->
         <div class="post" id="post-1">
             <div class="post-header">
@@ -389,7 +637,7 @@
             </div>
             <div class="post-actions">
                 <div class="action-left">
-                    <button class="post-action save-btn" title="Save post">
+                    <button class="post-action save-btn" title="Save post" data-post-id="1">
                         <i class="far fa-bookmark"></i>
                     </button>
                 </div>
@@ -442,7 +690,7 @@
             </div>
             <div class="post-actions">
                 <div class="action-left">
-                    <button class="post-action save-btn" title="Save post">
+                    <button class="post-action save-btn" title="Save post" data-post-id="2">
                         <i class="far fa-bookmark"></i>
                     </button>
                 </div>
@@ -480,7 +728,7 @@
             </div>
             <div class="post-actions">
                 <div class="action-left">
-                    <button class="post-action save-btn" title="Save post">
+                    <button class="post-action save-btn" title="Save post" data-post-id="3">
                         <i class="far fa-bookmark"></i>
                     </button>
                 </div>
@@ -539,26 +787,419 @@
         </a>
     </nav>
 
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
+        // Configuration
+        const GOOGLE_CLIENT_ID = '230366555128-bkm4jhc3c14scafm8808uk8u456u6cfk.apps.googleusercontent.com';
+        
+        // User state
+        let currentUser = null;
+        let userProfile = null;
+
+        // DOM Elements
+        const loginBtn = document.getElementById('loginBtn');
+        const authModal = document.getElementById('authModal');
+        const closeModal = document.getElementById('closeModal');
+        const userProfileElement = document.getElementById('userProfile');
+        const userNameElement = document.getElementById('userName');
+        const userAvatarElement = document.getElementById('userAvatar');
+        const profileSection = document.getElementById('profileSection');
+        const profileNameElement = document.getElementById('profileName');
+        const profileEmailElement = document.getElementById('profileEmail');
+        const profileAvatarElement = document.getElementById('profileAvatar');
+        const memberSinceElement = document.getElementById('memberSince');
+        const savedPostsCountElement = document.getElementById('savedPostsCount');
+        const daysActiveElement = document.getElementById('daysActive');
+        const communityRankElement = document.getElementById('communityRank');
+
+        // Initialize Google Sign In
+        function initializeGoogleSignIn() {
+            if (typeof google === 'undefined') {
+                console.error('Google Identity Services library not loaded');
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleCredentialResponse,
+                auto_select: false,
+                cancel_on_tap_outside: true
+            });
+
+            // Render Google Sign In Button
+            google.accounts.id.renderButton(
+                document.getElementById('googleSignInButton'),
+                { 
+                    theme: 'outline', 
+                    size: 'large',
+                    width: 300,
+                    text: 'signin_with',
+                    shape: 'rectangular'
+                }
+            );
+        }
+
+        // Handle Google Sign In Response
+        function handleCredentialResponse(response) {
+            console.log('Google Sign-In response received');
+            
+            // Decode the JWT token to get user info
+            const responsePayload = decodeJWTResponse(response.credential);
+            
+            if (responsePayload) {
+                currentUser = {
+                    id: responsePayload.sub,
+                    name: responsePayload.name,
+                    email: responsePayload.email,
+                    picture: responsePayload.picture,
+                    given_name: responsePayload.given_name,
+                    family_name: responsePayload.family_name
+                };
+
+                // Save user to localStorage
+                saveUserToStorage(currentUser);
+                
+                // Update UI
+                updateUserInterface();
+                
+                // Close modal
+                authModal.classList.remove('active');
+                
+                console.log('User signed in:', currentUser.name);
+            }
+        }
+
+        // Decode JWT token
+        function decodeJWTResponse(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error decoding JWT:', error);
+                return null;
+            }
+        }
+
+        // Save user to localStorage
+        function saveUserToStorage(user) {
+            const userData = {
+                ...user,
+                joinedDate: new Date().toISOString(),
+                savedPosts: getUserSavedPosts() || []
+            };
+            localStorage.setItem('iam_mugera_user', JSON.stringify(userData));
+        }
+
+        // Get user from localStorage
+        function getUserFromStorage() {
+            const userData = localStorage.getItem('iam_mugera_user');
+            return userData ? JSON.parse(userData) : null;
+        }
+
+        // Get user's saved posts
+        function getUserSavedPosts() {
+            const user = getUserFromStorage();
+            return user ? user.savedPosts : [];
+        }
+
+        // Save a post for user
+        function savePostForUser(postId) {
+            const user = getUserFromStorage();
+            if (user) {
+                if (!user.savedPosts) {
+                    user.savedPosts = [];
+                }
+                
+                if (!user.savedPosts.includes(postId)) {
+                    user.savedPosts.push(postId);
+                    localStorage.setItem('iam_mugera_user', JSON.stringify(user));
+                    updateSavedPostsCount();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Remove a saved post for user
+        function removeSavedPostForUser(postId) {
+            const user = getUserFromStorage();
+            if (user && user.savedPosts) {
+                user.savedPosts = user.savedPosts.filter(id => id !== postId);
+                localStorage.setItem('iam_mugera_user', JSON.stringify(user));
+                updateSavedPostsCount();
+                return true;
+            }
+            return false;
+        }
+
+        // Update saved posts count in profile
+        function updateSavedPostsCount() {
+            const savedPosts = getUserSavedPosts();
+            if (savedPostsCountElement) {
+                savedPostsCountElement.textContent = savedPosts ? savedPosts.length : 0;
+            }
+        }
+
+        // Calculate days active
+        function calculateDaysActive(joinDate) {
+            const join = new Date(joinDate);
+            const now = new Date();
+            const diffTime = Math.abs(now - join);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        }
+
+        // Determine community rank
+        function getCommunityRank(daysActive, savedPostsCount) {
+            if (daysActive >= 30 && savedPostsCount >= 10) return 'Leader';
+            if (daysActive >= 7 && savedPostsCount >= 5) return 'Active';
+            if (daysActive >= 3) return 'Member';
+            return 'New';
+        }
+
+        // Update user interface based on auth state
+        function updateUserInterface() {
+            const user = getUserFromStorage();
+            
+            if (user) {
+                // User is signed in
+                loginBtn.style.display = 'none';
+                userProfileElement.style.display = 'flex';
+                
+                // Update header user info
+                userNameElement.textContent = user.name;
+                userAvatarElement.src = user.picture;
+                
+                // Update profile section
+                profileSection.classList.add('active');
+                profileNameElement.textContent = user.name;
+                profileEmailElement.textContent = user.email;
+                profileAvatarElement.src = user.picture;
+                
+                // Calculate and display profile stats
+                const joinDate = user.joinedDate || new Date().toISOString();
+                const daysActive = calculateDaysActive(joinDate);
+                const savedPosts = getUserSavedPosts();
+                const savedPostsCount = savedPosts ? savedPosts.length : 0;
+                const communityRank = getCommunityRank(daysActive, savedPostsCount);
+                
+                memberSinceElement.textContent = new Date(joinDate).getFullYear();
+                daysActiveElement.textContent = daysActive;
+                savedPostsCountElement.textContent = savedPostsCount;
+                communityRankElement.textContent = communityRank;
+                
+                // Update save buttons state
+                updateSaveButtonsState(savedPosts);
+                
+            } else {
+                // User is signed out
+                loginBtn.style.display = 'flex';
+                userProfileElement.style.display = 'none';
+                profileSection.classList.remove('active');
+                
+                // Reset save buttons
+                document.querySelectorAll('.save-btn').forEach(btn => {
+                    const icon = btn.querySelector('i');
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    btn.classList.remove('active');
+                    btn.title = 'Save post';
+                });
+            }
+        }
+
+        // Update save buttons based on saved posts
+        function updateSaveButtonsState(savedPosts) {
+            document.querySelectorAll('.save-btn').forEach(btn => {
+                const postId = btn.getAttribute('data-post-id');
+                if (savedPosts && savedPosts.includes(postId)) {
+                    const icon = btn.querySelector('i');
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    btn.classList.add('active');
+                    btn.title = 'Remove from saved';
+                }
+            });
+        }
+
+        // Sign out user
+        function signOut() {
+            // Clear Google session
+            if (typeof google !== 'undefined') {
+                google.accounts.id.disableAutoSelect();
+                google.accounts.id.revoke(localStorage.getItem('google_token'), done => {
+                    console.log('Google session revoked');
+                });
+            }
+            
+            // Clear local storage
+            localStorage.removeItem('iam_mugera_user');
+            localStorage.removeItem('google_token');
+            
+            // Reset state
+            currentUser = null;
+            userProfile = null;
+            
+            // Update UI
+            updateUserInterface();
+            
+            console.log('User signed out');
+        }
+
+        // Event Listeners
+        loginBtn.addEventListener('click', () => {
+            authModal.classList.add('active');
+        });
+
+        closeModal.addEventListener('click', () => {
+            authModal.classList.remove('active');
+        });
+
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.classList.remove('active');
+            }
+        });
+
+        userProfileElement.addEventListener('click', () => {
+            // Scroll to profile section
+            profileSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('editProfileBtn').addEventListener('click', () => {
+            alert('Profile editing feature coming soon!');
+        });
+
+        document.getElementById('viewSavedBtn').addEventListener('click', () => {
+            const savedPosts = getUserSavedPosts();
+            if (savedPosts && savedPosts.length > 0) {
+                alert(`You have ${savedPosts.length} saved posts:\n${savedPosts.map(id => `Post ${id}`).join(', ')}`);
+            } else {
+                alert('You haven\'t saved any posts yet.');
+            }
+        });
+
         // Save button functionality
         document.querySelectorAll('.save-btn').forEach(button => {
             button.addEventListener('click', function() {
+                const user = getUserFromStorage();
+                
+                if (!user) {
+                    authModal.classList.add('active');
+                    return;
+                }
+                
+                const postId = this.getAttribute('data-post-id');
                 const icon = this.querySelector('i');
+                
                 if (icon.classList.contains('far')) {
-                    icon.classList.remove('far');
-                    icon.classList.add('fas');
-                    this.classList.add('active');
-                    this.title = 'Remove from saved';
+                    // Save post
+                    if (savePostForUser(postId)) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        this.classList.add('active');
+                        this.title = 'Remove from saved';
+                        console.log(`Post ${postId} saved`);
+                    }
                 } else {
-                    icon.classList.remove('fas');
-                    icon.classList.add('far');
-                    this.classList.remove('active');
-                    this.title = 'Save post';
+                    // Remove saved post
+                    if (removeSavedPostForUser(postId)) {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        this.classList.remove('active');
+                        this.title = 'Save post';
+                        console.log(`Post ${postId} removed from saved`);
+                    }
                 }
             });
         });
 
-        // Real publication dates for each post
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Google Sign In
+            initializeGoogleSignIn();
+            
+            // Check if user is already signed in
+            const savedUser = getUserFromStorage();
+            if (savedUser) {
+                currentUser = savedUser;
+                updateUserInterface();
+            }
+            
+            // Rest of your existing initialization code...
+            updatePostTimes();
+            
+            // Scroll to post if URL has hash
+            if (window.location.hash) {
+                const postElement = document.querySelector(window.location.hash);
+                if (postElement) {
+                    postElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            // Video autoplay and pause on scroll
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const videoContainer = entry.target;
+                    const iframe = videoContainer.querySelector('.google-vid-embed');
+                    
+                    if (entry.isIntersecting) {
+                        // Video is in view - attempt to play
+                        console.log('Video in view - would autoplay here');
+                    } else {
+                        // Video is out of view - pause
+                        console.log('Video out of view - would pause here');
+                    }
+                });
+            }, {
+                threshold: 0.7 // When 70% of video is visible
+            });
+
+            // Observe video container
+            document.querySelectorAll('.video-container').forEach(container => {
+                videoObserver.observe(container);
+            });
+
+            // Video controls simulation
+            document.querySelectorAll('.play-pause-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('fa-pause')) {
+                        icon.classList.remove('fa-pause');
+                        icon.classList.add('fa-play');
+                        console.log('Video paused');
+                    } else {
+                        icon.classList.remove('fa-play');
+                        icon.classList.add('fa-pause');
+                        console.log('Video playing');
+                    }
+                });
+            });
+
+            // Bottom nav active state
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // Only prevent default for current page navigation
+                    if (this.href === window.location.href) {
+                        e.preventDefault();
+                    }
+                    
+                    // Update active state visually
+                    document.querySelectorAll('.nav-item').forEach(nav => {
+                        nav.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+        });
+
+        // Your existing post time functionality
         const postDates = {
             'post-1': new Date('2025-11-15'), // Brand Introduction
             'post-2': new Date('2025-11-15'), // Commercial Video  
@@ -588,74 +1229,6 @@
                 }
             });
         }
-
-        // Update times when page loads
-        document.addEventListener('DOMContentLoaded', updatePostTimes);
-
-        // Scroll to post if URL has hash
-        window.addEventListener('DOMContentLoaded', () => {
-            if (window.location.hash) {
-                const postElement = document.querySelector(window.location.hash);
-                if (postElement) {
-                    postElement.scrollIntoView({ behavior: 'smooth' });
-                }
-            }
-        });
-
-        // Video autoplay and pause on scroll
-        const videoObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                const videoContainer = entry.target;
-                const iframe = videoContainer.querySelector('.google-vid-embed');
-                
-                if (entry.isIntersecting) {
-                    // Video is in view - attempt to play
-                    console.log('Video in view - would autoplay here');
-                } else {
-                    // Video is out of view - pause
-                    console.log('Video out of view - would pause here');
-                }
-            });
-        }, {
-            threshold: 0.7 // When 70% of video is visible
-        });
-
-        // Observe video container
-        document.querySelectorAll('.video-container').forEach(container => {
-            videoObserver.observe(container);
-        });
-
-        // Video controls simulation
-        document.querySelectorAll('.play-pause-btn').forEach(button => {
-            button.addEventListener('click', function() {
-                const icon = this.querySelector('i');
-                if (icon.classList.contains('fa-pause')) {
-                    icon.classList.remove('fa-pause');
-                    icon.classList.add('fa-play');
-                    console.log('Video paused');
-                } else {
-                    icon.classList.remove('fa-play');
-                    icon.classList.add('fa-pause');
-                    console.log('Video playing');
-                }
-            });
-        });
-
-        // Bottom nav active state
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-                // Only prevent default for current page navigation
-                if (this.href === window.location.href) {
-                    e.preventDefault();
-                }
-                
-                // Update active state visually
-                document.querySelectorAll('.nav-item').forEach(nav => {
-                    nav.classList.remove('active');
-                });
-                this.classList.add('active');
-            });
-        });
     </script>
 </body>
 </html>
